@@ -36,7 +36,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.Comm
 
         private void ExitableTabControlOnClose(object sender, CloseEventArgs e)
         {
-            Command.Execute(_commandParameterCallback());
+            bool canExecute = Command.CanExecute(_commandParameterCallback());
+
+            if (canExecute)
+            {
+                Command.Execute(_commandParameterCallback());
+            }
         }
     }
 }

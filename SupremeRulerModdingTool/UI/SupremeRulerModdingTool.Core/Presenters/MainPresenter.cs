@@ -157,36 +157,40 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
         }
 
         private bool CanSaveFiles()
-        {
-            return !_mainFilesPath.IsNullOrEmpty();
+        {      
+            List<IUnitTabPage> unitTabPages = View.UnitTabPages.ToList();
+
+            return !_mainFilesPath.IsNullOrEmpty() && unitTabPages.Count > 0;
         }
 
         private void CloseTab()
         {
             int closeIndex = _mainViewModel.CloseIndex;
 
-            IUnitEditorPresenter unitEditorPresenter = _unitEditorPresenters[closeIndex];
-            IUnitTabPage unitTabPage = View.UnitTabPages.ToList()[closeIndex];
+            List<IUnitTabPage> unitTabPages = View.UnitTabPages.ToList();
 
-            bool closePage = true;
+            IUnitEditorPresenter unitEditorPresenter = _unitEditorPresenters[closeIndex];
+            IUnitTabPage unitTabPage = unitTabPages[closeIndex];
+
+            View.RemoveTab(unitTabPage);
+            _unitEditorPresenters.RemoveAt(closeIndex);
+            unitEditorPresenter.Dispose();
+
+            RaiseCanExecuteChanged(_mainViewModel.SaveFiles as DelegateCommand);
+        }
+
+        private bool CanCloseTab()
+        {
+            int closeIndex = _mainViewModel.CloseIndex;
+            IUnitEditorPresenter unitEditorPresenter = _unitEditorPresenters[closeIndex];
 
             if (unitEditorPresenter.IsDirty)
             {
                 string message = string.Format("There are unsaved changes. Do you really want to close {0} Page", unitEditorPresenter.Name);
 
-                closePage = _messageService.ShowYesNoQuestion(View, message);
+                return _messageService.ShowYesNoQuestion(View, message);
             }
 
-            if (closePage)
-            {
-                View.RemoveTab(unitTabPage);
-                _unitEditorPresenters.RemoveAt(closeIndex);
-                unitEditorPresenter.Dispose();
-            }
-        }
-
-        private bool CanCloseTab()
-        {
             return true;
         }
 
