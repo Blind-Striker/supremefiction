@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -24,12 +23,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
         private readonly IUnitTabPageFactory _unitTabPageFactory;
         private readonly MainViewModel _mainViewModel;
 
-        private Container _container;
+        private readonly List<IUnitEditorPresenter> _unitEditorPresenters;
+
+        private readonly Container _container;
 
         private string _mainFilesPath;
         private string _defaultUnitsFile;
-
-        private List<IUnitEditorPresenter> _unitEditorPresenters;
 
         public MainPresenter(
             IMainView view, 
@@ -119,19 +118,18 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private void CreateNewUnitFile()
         {
-            throw new System.NotImplementedException();
         }
 
         private bool CanCreateNewUnitFile()
         {
-            return !EnumerableExtensions.IsNullOrEmpty(_mainFilesPath);
+            return !_mainFilesPath.IsNullOrEmpty();
         }
 
         private void OpenExistingUnitFile()
         {
             string fileName = _dialogService.ShowFileDialog(this, "Unit File (*.UNIT)|*.UNIT|All files (*.*)|*.*");
 
-            if (EnumerableExtensions.IsNullOrEmpty(fileName))
+            if (fileName.IsNullOrEmpty())
             {
                 return;
             }
@@ -151,17 +149,16 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private bool CanOpenExistingUnitFile()
         {
-            return !EnumerableExtensions.IsNullOrEmpty(_mainFilesPath);
+            return !_mainFilesPath.IsNullOrEmpty();
         }
 
         private void SaveFiles()
         {
-            throw new System.NotImplementedException();
         }
 
         private bool CanSaveFiles()
         {
-            return !EnumerableExtensions.IsNullOrEmpty(_mainFilesPath);
+            return !_mainFilesPath.IsNullOrEmpty();
         }
 
         private void CloseTab()
@@ -195,7 +192,6 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private void SelectedTabChanged()
         {
-
         }
 
         private bool CanSelectedTabChanged()
