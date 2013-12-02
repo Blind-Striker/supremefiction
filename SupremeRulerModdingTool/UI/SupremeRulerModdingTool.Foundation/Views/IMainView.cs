@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MvpVmFramework.Core.Foundation;
-using SupremeRulerModdingTool.Foundation.Presenters;
+﻿using MvpVmFramework.Core.Foundation;
 
-namespace SupremeRulerModdingTool.Foundation.Views
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
+
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views
 {
     public interface IMainView : IPresenteredView<IMainPresenter>
     {

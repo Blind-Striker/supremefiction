@@ -2,47 +2,43 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CodeFiction.DarkMatterFramework.Libraries.IOLibrary;
-using SupremeRulerModdingTool.Foundation.Models;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Models;
 
-namespace SupremeRulerModdingTool.Core
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 {
     public class UnitFileHelper
     {
-        private static readonly List<string> _categories = new List<string>() {"Units", "Missiles", "Upgrades"};
-        private static List<string> _classes;
-        private static List<string> _subClasses; 
+        private static readonly List<string> CategoryList = new List<string> { "Units", "Missiles", "Upgrades" };
 
-        private static readonly List<ItemClass> ItemClasses = new List<ItemClass>()
+        private static readonly List<ItemClass> ItemClasses = new List<ItemClass>
         {
-            new ItemClass {Category = "Units",Class = "Land Unit",SubClass = "Infantry",UnitClass = 0},
-            new ItemClass {Category = "Units",Class = "Land Unit",SubClass = "Recon",UnitClass = 1},
-            new ItemClass {Category = "Units",Class = "Land Unit",SubClass = "Tank",UnitClass = 2},
-            new ItemClass {Category = "Units",Class = "Land Unit",SubClass = "Anti-Tank",UnitClass = 3},
-            new ItemClass {Category = "Units",Class = "Land Unit",SubClass = "Artillery/MLRS/Launch Vehicle/Mortar",UnitClass = 4},
-            new ItemClass {Category = "Units",Class = "Land Unit",SubClass = "Air Defense",UnitClass = 5},
-            new ItemClass {Category = "Units",Class = "Land Unit",SubClass = "Transport/Bridging",UnitClass = 6},
-
-            new ItemClass {Category = "Units",Class = "Air Units",SubClass = "Helicopter",UnitClass = 7},
-            new ItemClass {Category = "Units",Class = "Air Units",SubClass = "Fighter/Interceptor",UnitClass = 9},
-            new ItemClass {Category = "Units",Class = "Air Units",SubClass = "Fighter/Bomber",UnitClass = 10},
-            new ItemClass {Category = "Units",Class = "Air Units",SubClass = "Fighter/Multi Role",UnitClass = 11},
-            new ItemClass {Category = "Units",Class = "Air Units",SubClass = "Strategic Bomber",UnitClass = 12},
-            new ItemClass {Category = "Units",Class = "Air Units",SubClass = "Patrol/AWACS/Recon/Surveillance/Surveillance/ECM/Recce",UnitClass = 13},
-            new ItemClass {Category = "Units",Class = "Air Units",SubClass = "Transport/Tanker",UnitClass = 14},
-
-            new ItemClass {Category = "Units",Class = "Naval Units",SubClass = "Submarine",UnitClass = 15},
-            new ItemClass {Category = "Units",Class = "Naval Units",SubClass = "Carrier",UnitClass = 16},
-            new ItemClass {Category = "Units",Class = "Naval Units",SubClass = "Battleship/Cruiser/Destroyer",UnitClass = 17},
-            new ItemClass {Category = "Units",Class = "Naval Units",SubClass = "Frigate/Corvette",UnitClass = 18},
-            new ItemClass {Category = "Units",Class = "Naval Units",SubClass = "Patrol/Recon",UnitClass = 19},
-            new ItemClass {Category = "Units",Class = "Naval Units",SubClass = "Transport/Support",UnitClass = 20},
-
-            new ItemClass {Category = "Missiles",Class = "Missile Units",SubClass = "Missile",UnitClass = 8},
-
-            new ItemClass {Category = "Upgrades",Class = "Facilities",SubClass = "Facility",UnitClass = 21},
+            new ItemClass { Category = "Units", Class = "Land Unit", SubClass = "Infantry", UnitClass = 0 },
+            new ItemClass { Category = "Units", Class = "Land Unit", SubClass = "Recon", UnitClass = 1 },
+            new ItemClass { Category = "Units", Class = "Land Unit", SubClass = "Tank", UnitClass = 2 },
+            new ItemClass { Category = "Units", Class = "Land Unit", SubClass = "Anti-Tank", UnitClass = 3 },
+            new ItemClass { Category = "Units", Class = "Land Unit", SubClass = "Artillery/MLRS/Launch Vehicle/Mortar", UnitClass = 4 },
+            new ItemClass { Category = "Units", Class = "Land Unit", SubClass = "Air Defense", UnitClass = 5 },
+            new ItemClass { Category = "Units", Class = "Land Unit", SubClass = "Transport/Bridging", UnitClass = 6 },
+                            
+            new ItemClass { Category = "Units", Class = "Air Units", SubClass = "Helicopter", UnitClass = 7 },
+            new ItemClass { Category = "Units", Class = "Air Units", SubClass = "Fighter/Interceptor", UnitClass = 9 },
+            new ItemClass { Category = "Units", Class = "Air Units", SubClass = "Fighter/Bomber", UnitClass = 10 },
+            new ItemClass { Category = "Units", Class = "Air Units", SubClass = "Fighter/Multi Role", UnitClass = 11 },
+            new ItemClass { Category = "Units", Class = "Air Units", SubClass = "Strategic Bomber", UnitClass = 12 },
+            new ItemClass { Category = "Units", Class = "Air Units", SubClass = "Patrol/AWACS/Recon/Surveillance/Surveillance/ECM/Recce", UnitClass = 13 },
+            new ItemClass { Category = "Units", Class = "Air Units", SubClass = "Transport/Tanker", UnitClass = 14 },
+                            
+            new ItemClass { Category = "Units", Class = "Naval Units", SubClass = "Submarine", UnitClass = 15 },
+            new ItemClass { Category = "Units", Class = "Naval Units", SubClass = "Carrier", UnitClass = 16 },
+            new ItemClass { Category = "Units", Class = "Naval Units", SubClass = "Battleship/Cruiser/Destroyer", UnitClass = 17 },
+            new ItemClass { Category = "Units", Class = "Naval Units", SubClass = "Frigate/Corvette", UnitClass = 18 },
+            new ItemClass { Category = "Units", Class = "Naval Units", SubClass = "Patrol/Recon", UnitClass = 19 },
+            new ItemClass { Category = "Units", Class = "Naval Units", SubClass = "Transport/Support", UnitClass = 20 },
+                            
+            new ItemClass { Category = "Missiles", Class = "Missile Units", SubClass = "Missile", UnitClass = 8 },
+                            
+            new ItemClass { Category = "Upgrades", Class = "Facilities", SubClass = "Facility", UnitClass = 21 },
         };
 
         private readonly List<string> _unitHeaders;
@@ -57,7 +53,7 @@ namespace SupremeRulerModdingTool.Core
 
             string readFile = IoHelper.ReadFile(path);
 
-            using (StringReader stringReader = new StringReader(readFile))
+            using (var stringReader = new StringReader(readFile))
             {
                 int count = 0;
                 string line;
@@ -69,21 +65,24 @@ namespace SupremeRulerModdingTool.Core
                         continue;
                     }
 
-                    if (count == 1) // Units
+                    // Units
+                    if (count == 1) 
                     {
                         _unitHeaders = GetHeader(line);
                         count++;
                         continue;
                     }
 
-                    if (count == 2) // Missiles
+                    // Missiles
+                    if (count == 2) 
                     {
                         _missileHeaders = GetHeader(line);
                         count++;
                         continue;
                     }
 
-                    if (count == 3) // Upgrades
+                    // Upgrades
+                    if (count == 3) 
                     {
                         _upgradeHeaders = GetHeader(line);
                         count++;
@@ -107,18 +106,17 @@ namespace SupremeRulerModdingTool.Core
                     AddToContainer(categoryByUnitClass, values);
                 }
             }
-            
         }
 
-        public static IList<string> Categories
+        public static IEnumerable<string> Categories
         {
             get
             {
-                return _categories;
+                return CategoryList;
             }
         }
 
-        public static IList<string> GetClasses(string category)
+        public static IEnumerable<string> GetClasses(string category)
         {
             return ItemClasses.Where(@class => @class.Category == category)
                     .Select(@class => @class.Class)
@@ -126,7 +124,7 @@ namespace SupremeRulerModdingTool.Core
                     .ToList();
         }
 
-        public static IList<string> GetSubClasses(string className)
+        public static IEnumerable<string> GetSubClasses(string className)
         {
             return ItemClasses.Where(@class => @class.Class == className)
                     .Select(@class => @class.SubClass)
@@ -217,7 +215,7 @@ namespace SupremeRulerModdingTool.Core
 
             List<string> headerByCategory = GetHeaderByCategory(category);
 
-            ItemModel model = new ItemModel();
+            var model = new ItemModel();
 
             for (int i = 0; i < headerByCategory.Count; i++)
             {

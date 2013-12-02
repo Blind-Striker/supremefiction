@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MvpVmFramework.Core.Foundation;
-using SupremeRulerModdingTool.Foundation.Models;
-using SupremeRulerModdingTool.Foundation.Presenters;
-using SupremeRulerModdingTool.Foundation.ViewModels;
-using SupremeRulerModdingTool.Foundation.Views;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Models;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.Core.Presenters
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 {
     internal class UnitEditorPresenter : BasePresenter<IUnitEditorView, IUnitEditorPresenter>, IUnitEditorPresenter
     {
         private readonly UnitEditorViewModel _unitEditorViewModel;
         private UnitFileHelper _fileHelper;
         private bool _preventEventFire;
-        private int _lastLengthOfSearchText = 0;
+        private int _lastLengthOfSearchText;
 
         public UnitEditorPresenter(IUnitEditorView view) : base(view)
         {
@@ -36,7 +34,7 @@ namespace SupremeRulerModdingTool.Core.Presenters
 
             IEnumerable<ComboboxItem> categoryList = UnitFileHelper.Categories.ToComboboxItems();
 
-            BindingList<ComboboxItem> categories = new BindingList<ComboboxItem>(categoryList.ToList());
+            var categories = new BindingList<ComboboxItem>(categoryList.ToList());
 
             ComboboxItem category = categories[0];
 
@@ -92,8 +90,8 @@ namespace SupremeRulerModdingTool.Core.Presenters
 
             IEnumerable<ComboboxItem> comboboxItems = UnitFileHelper.GetClasses(currentCategory).ToComboboxItems();
 
-            BindingList<ComboboxItem> classes = new BindingList<ComboboxItem>(comboboxItems.ToList());
-            classes.Insert(0, new ComboboxItem() {ComboboxItemDisplayMember = "Select", ComboboxItemValueMember = "Select"});
+            var classes = new BindingList<ComboboxItem>(comboboxItems.ToList());
+            classes.Insert(0, new ComboboxItem { ComboboxItemDisplayMember = "Select", ComboboxItemValueMember = "Select" });
 
             ComboboxItem selectedItem = _unitEditorViewModel.Categories.FirstOrDefault(item => item.ComboboxItemValueMember == _unitEditorViewModel.CurrentCategoryItemSelectedValue);
 
@@ -119,8 +117,8 @@ namespace SupremeRulerModdingTool.Core.Presenters
                     string @class = _unitEditorViewModel.CurrentClassItemSelectedValue;
                     IEnumerable<ComboboxItem> comboboxItems = UnitFileHelper.GetSubClasses(@class).ToComboboxItems();
 
-                    BindingList<ComboboxItem> subClasses = new BindingList<ComboboxItem>(comboboxItems.ToList());
-                    subClasses.Insert(0, new ComboboxItem() { ComboboxItemDisplayMember = "Select", ComboboxItemValueMember = "Select" });
+                    var subClasses = new BindingList<ComboboxItem>(comboboxItems.ToList());
+                    subClasses.Insert(0, new ComboboxItem { ComboboxItemDisplayMember = "Select", ComboboxItemValueMember = "Select" });
 
                     _unitEditorViewModel.SubClasses = subClasses;
                     _unitEditorViewModel.CurrentSubClassItemSelectedValue = "Select";

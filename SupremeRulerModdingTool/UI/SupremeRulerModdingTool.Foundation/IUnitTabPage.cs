@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SupremeRulerModdingTool.Foundation.Views;
+﻿using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.Foundation
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation
 {
     public interface IUnitTabPage
     {
-        void SetUnitEditor(IUnitEditorView view);
         string TabName { get; set; }
+
+        void SetUnitEditor(IUnitEditorView view);
     }
 }

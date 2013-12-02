@@ -7,8 +7,8 @@
     <ProjectGuid>{1F2B83FD-D67D-46B4-B519-10337288805F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SupremeRulerModdingTool.Core</RootNamespace>
-    <AssemblyName>SupremeRulerModdingTool.Core</AssemblyName>
+    <RootNamespace>SupremeFiction.UI.SupremeRulerModdingTool.Core</RootNamespace>
+    <AssemblyName>SupremeFiction.UI.SupremeRulerModdingTool.Core</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>

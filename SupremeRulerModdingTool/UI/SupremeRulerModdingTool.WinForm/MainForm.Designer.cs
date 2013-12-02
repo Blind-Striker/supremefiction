@@ -1,4 +1,4 @@
-﻿namespace SupremeRulerModdingTool.WinForm
+﻿namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 {
     partial class MainForm
     {

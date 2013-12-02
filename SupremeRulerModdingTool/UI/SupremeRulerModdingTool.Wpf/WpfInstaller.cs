@@ -5,9 +5,9 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using MvpVmFramework.Core.Foundation;
 using MvpVmFramework.Core.Services;
-using SupremeRulerModdingTool.Foundation.Views;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.Wpf
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Wpf
 {
     class WpfInstaller : IWindsorInstaller
     {

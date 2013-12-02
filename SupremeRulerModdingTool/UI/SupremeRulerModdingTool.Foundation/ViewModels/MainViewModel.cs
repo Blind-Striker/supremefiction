@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using MvpVmFramework.Core.Foundation;
 
-namespace SupremeRulerModdingTool.Foundation.ViewModels
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
@@ -12,7 +12,11 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
 
         public ICommand SelectGamePath
         {
-            get { return _selectGamePath; }
+            get
+            {
+                return _selectGamePath;
+            }
+
             set
             {
                 if (_selectGamePath != value)
@@ -25,7 +29,11 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
 
         public ICommand CreateNewUnitFile
         {
-            get { return _createNewUnitFile; }
+            get
+            {
+                return _createNewUnitFile;
+            }
+
             set
             {
                 if (_createNewUnitFile != value)
@@ -38,7 +46,11 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
 
         public ICommand OpenExistingUnitFile
         {
-            get { return _openExistingUnitFile; }
+            get
+            {
+                return _openExistingUnitFile;
+            }
+
             set
             {
                 if (_openExistingUnitFile != value)
@@ -51,7 +63,11 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
 
         public ICommand SaveFiles
         {
-            get { return _saveFiles; }
+            get
+            {
+                return _saveFiles;
+            }
+
             set
             {
                 if (_saveFiles != value)

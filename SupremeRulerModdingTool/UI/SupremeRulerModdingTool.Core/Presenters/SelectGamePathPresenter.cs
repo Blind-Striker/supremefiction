@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Waf.Applications;
 using System.Waf.Applications.Services;
 using MvpVmFramework.Core.Foundation;
-using SupremeRulerModdingTool.Foundation;
-using SupremeRulerModdingTool.Foundation.Presenters;
-using SupremeRulerModdingTool.Foundation.ViewModels;
-using SupremeRulerModdingTool.Foundation.Views;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.Core.Presenters
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 {
     internal class SelectGamePathPresenter : BasePresenter<ISelectGamePathView, ISelectGamePathPresenter>, ISelectGamePathPresenter
     {

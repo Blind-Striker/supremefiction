@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using SupremeRulerModdingTool.Foundation;
 
-namespace SupremeRulerModdingTool.Core
+using Newtonsoft.Json;
+
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
+
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 {
     internal class IsolatedStorageAppSettings : IAppSettings
     {
@@ -29,6 +27,7 @@ namespace SupremeRulerModdingTool.Core
                 Settings.TryGetValue(key, out value);
                 return value;
             }
+
             set
             {
                 if (Settings.ContainsKey(key))
@@ -47,15 +46,14 @@ namespace SupremeRulerModdingTool.Core
             try
             {
                 IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForAssembly();
-                using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(SettingsFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, storage))
+                using (var stream = new IsolatedStorageFileStream(SettingsFileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, storage))
                 {
-                    using (StreamWriter writer = new StreamWriter(stream))
+                    using (var writer = new StreamWriter(stream))
                     {
                         string serializedSettings = JsonConvert.SerializeObject(Settings);
                         writer.Write(serializedSettings);
                     }
                 }
-
             }
             catch
             {
@@ -73,16 +71,15 @@ namespace SupremeRulerModdingTool.Core
                     return new Dictionary<string, object>();
                 }
 
-                using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(SettingsFileName, FileMode.Open, FileAccess.Read, storage))
+                using (var stream = new IsolatedStorageFileStream(SettingsFileName, FileMode.Open, FileAccess.Read, storage))
                 {
-                    using (StreamReader reader = new StreamReader(stream))
+                    using (var reader = new StreamReader(stream))
                     {
                         string json = reader.ReadToEnd();
 
                         return JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
                     }
                 }
-
             }
             catch
             {

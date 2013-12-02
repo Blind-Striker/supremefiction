@@ -1,10 +1,10 @@
 ﻿using System;
-using SupremeRulerModdingTool.Core;
-using SupremeRulerModdingTool.Foundation.Presenters;
-using SupremeRulerModdingTool.Foundation.ViewModels;
-using SupremeRulerModdingTool.Foundation.Views;
+using SupremeFiction.UI.SupremeRulerModdingTool.Core;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.WinForm
+namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 {
     public partial class SelectGamePathForm : BaseForm, ISelectGamePathView
     {

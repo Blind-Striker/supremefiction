@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Windows.Forms;
-using BootstrapperLibrary;
 using MvpVmFramework.Core.Foundation;
-using SupremeRulerModdingTool.Core;
-using SupremeRulerModdingTool.Foundation.Presenters;
+using SupremeFiction.DependencyInjection.BootstrapperLibrary;
+using SupremeFiction.UI.SupremeRulerModdingTool.Core;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
 
-namespace SupremeRulerModdingTool.WinForm
+namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        internal static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

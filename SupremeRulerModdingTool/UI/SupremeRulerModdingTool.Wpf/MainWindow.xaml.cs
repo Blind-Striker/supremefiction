@@ -1,10 +1,10 @@
 ﻿using System.Windows;
-using SupremeRulerModdingTool.Foundation;
-using SupremeRulerModdingTool.Foundation.Presenters;
-using SupremeRulerModdingTool.Foundation.ViewModels;
-using SupremeRulerModdingTool.Foundation.Views;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.Wpf
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Wpf
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -17,11 +17,14 @@ namespace SupremeRulerModdingTool.Wpf
         }
 
         public IMainPresenter Presenter { get; set; }
-        public void AddTab(IUnitTabPage unitTabPage)
+
+        private MainViewModel ViewModel
         {
-            throw new System.NotImplementedException();
+            get { return DataContext as MainViewModel; }
         }
 
-        private MainViewModel ViewModel { get { return DataContext as MainViewModel; } }
+        public void AddTab(IUnitTabPage unitTabPage)
+        {
+        }
     }
 }

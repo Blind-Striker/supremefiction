@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MvpVmFramework.Core.Foundation;
-using SupremeRulerModdingTool.Foundation.Views;
+﻿using MvpVmFramework.Core.Foundation;
 
-namespace SupremeRulerModdingTool.Foundation.Presenters
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
+
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters
 {
     public interface ISelectGamePathPresenter : IPresenter<ISelectGamePathView>
     {

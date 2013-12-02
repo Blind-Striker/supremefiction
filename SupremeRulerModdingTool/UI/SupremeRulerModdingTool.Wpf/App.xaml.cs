@@ -1,10 +1,10 @@
 ﻿using System.Windows;
-using BootstrapperLibrary;
 using MvpVmFramework.Core.Foundation;
-using SupremeRulerModdingTool.Core;
-using SupremeRulerModdingTool.Foundation.Presenters;
+using SupremeFiction.DependencyInjection.BootstrapperLibrary;
+using SupremeFiction.UI.SupremeRulerModdingTool.Core;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
 
-namespace SupremeRulerModdingTool.Wpf
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Wpf
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -20,7 +20,7 @@ namespace SupremeRulerModdingTool.Wpf
             var presenterFactory = registerInstaller.WindsorContainer.Resolve<IPresenterFactory>();
             var mainPresenter = presenterFactory.CreatePresenter<IMainPresenter>();
 
-            Window mainWindow = mainPresenter.View as Window;
+            var mainWindow = mainPresenter.View as Window;
 
             mainWindow.ShowDialog();
         }

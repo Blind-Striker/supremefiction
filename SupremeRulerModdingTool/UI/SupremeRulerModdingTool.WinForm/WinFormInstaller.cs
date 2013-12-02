@@ -5,10 +5,10 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using MvpVmFramework.Core.Foundation;
 using MvpVmFramework.Core.Services;
-using SupremeRulerModdingTool.Foundation;
-using SupremeRulerModdingTool.Foundation.Views;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.WinForm
+namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 {
     public class WinFormInstaller : IWindsorInstaller
     {
@@ -17,14 +17,10 @@ namespace SupremeRulerModdingTool.WinForm
             container.Register(
                 Component.For<IMainView>().ImplementedBy<MainForm>().LifestyleTransient(),
                 Component.For<ISelectGamePathView>().ImplementedBy<SelectGamePathForm>().LifestyleTransient(),
-
                 Component.For<IUnitEditorView>().ImplementedBy<UnitEditorUserControl>().LifestyleTransient(),
-
                 Component.For<IMessageService>().ImplementedBy<MessageService>().LifestyleTransient(),
                 Component.For<IDialogService>().ImplementedBy<WindowsFormDialogService>().LifestyleTransient(),
-
-                Component.For<IUnitTabPageFactory>().ImplementedBy<UnitTabPageFactory>().LifestyleTransient()
-                );
+                Component.For<IUnitTabPageFactory>().ImplementedBy<UnitTabPageFactory>().LifestyleTransient());
         }
     }
 }

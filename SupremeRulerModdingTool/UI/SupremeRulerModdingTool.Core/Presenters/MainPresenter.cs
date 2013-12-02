@@ -3,13 +3,15 @@ using System.ComponentModel;
 using System.IO;
 using System.Waf.Applications;
 using System.Waf.Applications.Services;
-using MvpVmFramework.Core.Foundation;
-using SupremeRulerModdingTool.Foundation;
-using SupremeRulerModdingTool.Foundation.Presenters;
-using SupremeRulerModdingTool.Foundation.ViewModels;
-using SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.Core.Presenters
+using MvpVmFramework.Core.Foundation;
+
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
+
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 {
     internal class MainPresenter : BasePresenter<IMainView, IMainPresenter>, IMainPresenter
     {
@@ -122,7 +124,7 @@ namespace SupremeRulerModdingTool.Core.Presenters
                 return;
             }
 
-            IUnitEditorPresenter unitEditorPresenter = _presenterFactory.CreatePresenter<IUnitEditorPresenter>();
+            var unitEditorPresenter = _presenterFactory.CreatePresenter<IUnitEditorPresenter>();
             IUnitTabPage unitTabPage = _unitTabPageFactory.CreateTabPage(unitEditorPresenter.View);
             unitTabPage.TabName = Path.GetFileNameWithoutExtension(fileName);
 
@@ -148,7 +150,6 @@ namespace SupremeRulerModdingTool.Core.Presenters
 
         private void MainViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-
         }
 
         private void RaiseCanExecuteChanged(DelegateCommand delegateCommand)

@@ -5,11 +5,11 @@ using Castle.Windsor;
 
 using MvpVmFramework.Core.Foundation;
 
-using SupremeRulerModdingTool.Core.Presenters;
-using SupremeRulerModdingTool.Foundation;
-using SupremeRulerModdingTool.Foundation.Presenters;
+using SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
 
-namespace SupremeRulerModdingTool.Core
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 {
     public class CoreInstaller : IWindsorInstaller
     {
@@ -19,12 +19,9 @@ namespace SupremeRulerModdingTool.Core
 
             container.Register(
                 Component.For<IPresenterFactory>().AsFactory().LifestyleTransient(),
-
                 Component.For<IMainPresenter>().ImplementedBy<MainPresenter>().LifestyleTransient(),
                 Component.For<ISelectGamePathPresenter>().ImplementedBy<SelectGamePathPresenter>().LifestyleSingleton(),
                 Component.For<IUnitEditorPresenter>().ImplementedBy<UnitEditorPresenter>().LifestyleTransient(),
-                
-
                 Component.For<IAppSettings>().ImplementedBy<IsolatedStorageAppSettings>().LifestyleSingleton());
         }
     }

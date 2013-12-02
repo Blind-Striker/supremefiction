@@ -7,8 +7,8 @@
     <ProjectGuid>{F3B03A19-1AFB-4D1F-8769-BB979CB83A5B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BootstrapperLibrary</RootNamespace>
-    <AssemblyName>BootstrapperLibrary</AssemblyName>
+    <RootNamespace>SupremeFiction.DependencyInjection.BootstrapperLibrary</RootNamespace>
+    <AssemblyName>SupremeFiction.DependencyInjection.BootstrapperLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>

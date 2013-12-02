@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using SupremeRulerModdingTool.Foundation.Presenters;
-using SupremeRulerModdingTool.Foundation.ViewModels;
-using SupremeRulerModdingTool.Foundation.Views;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.WinForm
+namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 {
     public partial class UnitEditorUserControl : UserControl, IUnitEditorView
     {
@@ -19,6 +13,8 @@ namespace SupremeRulerModdingTool.WinForm
         {
             InitializeComponent();
         }
+
+        public IUnitEditorPresenter Presenter { get; set; }
 
         public object DataContext
         {
@@ -52,12 +48,10 @@ namespace SupremeRulerModdingTool.WinForm
 
         private UnitEditorViewModel ReBindGrid()
         {
-            UnitEditorViewModel unitEditorViewModel = DataContext as UnitEditorViewModel;
+            var unitEditorViewModel = DataContext as UnitEditorViewModel;
 
             dataGridUnits.DataSource = unitEditorViewModel.ItemModels;
             return unitEditorViewModel;
         }
-
-        public IUnitEditorPresenter Presenter { get; set; }
     }
 }

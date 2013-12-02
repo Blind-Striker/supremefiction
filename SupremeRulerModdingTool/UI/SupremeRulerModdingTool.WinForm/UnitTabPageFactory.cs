@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SupremeRulerModdingTool.Foundation;
-using SupremeRulerModdingTool.Foundation.Views;
+﻿using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.WinForm
+namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 {
     internal class UnitTabPageFactory : IUnitTabPageFactory
     {
         public IUnitTabPage CreateTabPage(IUnitEditorView unitEditorView)
         {
-            UnitTabPage unitTabPage = new UnitTabPage();
+            var unitTabPage = new UnitTabPage();
             unitTabPage.SetUnitEditor(unitEditorView);
 
             return unitTabPage;

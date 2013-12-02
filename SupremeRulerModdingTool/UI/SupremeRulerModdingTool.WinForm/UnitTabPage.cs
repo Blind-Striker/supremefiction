@@ -1,11 +1,17 @@
 ﻿using System.Windows.Forms;
-using SupremeRulerModdingTool.Foundation;
-using SupremeRulerModdingTool.Foundation.Views;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.WinForm
+namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 {
     internal class UnitTabPage : TabPage, IUnitTabPage
     {
+        public string TabName
+        {
+            get { return Text; }
+            set { Text = value; }
+        }
+
         public void SetUnitEditor(IUnitEditorView view)
         {
             Controls.Clear();
@@ -15,17 +21,11 @@ namespace SupremeRulerModdingTool.WinForm
                  // Todo throw exception
             }
 
-            Control control = view as Control;
+            var control = view as Control;
 
             control.Dock = DockStyle.Fill;
 
             Controls.Add(control);
-        }
-
-        public string TabName
-        {
-            get { return Text; }
-            set { Text = value; }
         }
     }
 }

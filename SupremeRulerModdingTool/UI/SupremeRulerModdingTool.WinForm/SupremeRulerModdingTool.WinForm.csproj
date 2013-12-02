@@ -7,8 +7,8 @@
     <ProjectGuid>{E613E261-6952-43D3-89D7-EA02BFD7DF2F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SupremeRulerModdingTool.WinForm</RootNamespace>
-    <AssemblyName>SupremeRulerModdingTool.WinForm</AssemblyName>
+    <RootNamespace>SupremeFiction.UI.SupremeRulerModdingTool.WinForm</RootNamespace>
+    <AssemblyName>SupremeFiction</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
@@ -99,6 +99,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="SelectGamePathForm.resx">
       <DependentUpon>SelectGamePathForm.cs</DependentUpon>

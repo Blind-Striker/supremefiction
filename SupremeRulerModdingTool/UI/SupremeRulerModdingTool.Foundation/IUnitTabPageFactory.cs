@@ -1,6 +1,6 @@
-﻿using SupremeRulerModdingTool.Foundation.Views;
+﻿using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
-namespace SupremeRulerModdingTool.Foundation
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation
 {
     public interface IUnitTabPageFactory
     {

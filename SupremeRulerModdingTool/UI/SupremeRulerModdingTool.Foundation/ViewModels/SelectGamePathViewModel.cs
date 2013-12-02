@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using MvpVmFramework.Core.Foundation;
 
-namespace SupremeRulerModdingTool.Foundation.ViewModels
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels
 {
     public class SelectGamePathViewModel : BaseViewModel
     {
@@ -19,6 +19,7 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _description;
             }
+
             set
             {
                 if (_description != value)
@@ -35,6 +36,7 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _gamePath;
             }
+
             set
             {
                 if (_gamePath != value)
@@ -51,6 +53,7 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _select;
             }
+
             set
             {
                 if (_select != value)
@@ -67,6 +70,7 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _cancel;
             }
+
             set
             {
                 if (_cancel != value)
@@ -83,6 +87,7 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _browse;
             }
+
             set
             {
                 if (_browse != value)
@@ -99,6 +104,7 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _search;
             }
+
             set
             {
                 if (_search != value)

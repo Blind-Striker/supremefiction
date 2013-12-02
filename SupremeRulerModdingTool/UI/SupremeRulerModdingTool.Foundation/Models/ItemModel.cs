@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace SupremeRulerModdingTool.Foundation.Models
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Models
 {
     public class ItemModel : Dictionary<string, object>
     {

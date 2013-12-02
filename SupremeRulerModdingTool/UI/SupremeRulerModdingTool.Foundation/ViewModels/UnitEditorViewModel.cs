@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MvpVmFramework.Core.Foundation;
-using SupremeRulerModdingTool.Foundation.Models;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Models;
 
-namespace SupremeRulerModdingTool.Foundation.ViewModels
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels
 {
     public class UnitEditorViewModel : BaseViewModel
     {
@@ -30,7 +24,11 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
 
         public string CurrentCategoryItemSelectedValue
         {
-            get { return _currentCategoryItemSelectedValue; }
+            get
+            {
+                return _currentCategoryItemSelectedValue;
+            }
+
             set
             {
                 bool changed = CheckPropertyChanged(_currentCategoryItemSelectedValue, value);
@@ -38,14 +36,18 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
                 if (changed)
                 {
                     _currentCategoryItemSelectedValue = value;
-                    RaisePropertyChanged("CurrentCategoryItemSelectedValue");
+                    RaisePropertyChanged();
                 }
             }
         }
 
         public ComboboxItem CurrentCategoryItem
         {
-            get { return _currentCategoryItem; }
+            get
+            {
+                return _currentCategoryItem;
+            }
+
             set
             {
                 bool changed = CheckPropertyChanged(_currentCategoryItem, value);
@@ -53,14 +55,18 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
                 if (changed)
                 {
                     _currentCategoryItem = value;
-                    RaisePropertyChanged("CurrentCategoryItem");
+                    RaisePropertyChanged();
                 }
             }
         }
 
         public string CurrentClassItemSelectedValue
         {
-            get { return _currentClassItemSelectedValue; }
+            get
+            {
+                return _currentClassItemSelectedValue;
+            }
+
             set
             {
                 bool changed = CheckPropertyChanged(_currentClassItemSelectedValue, value);
@@ -68,14 +74,18 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
                 if (changed)
                 {
                     _currentClassItemSelectedValue = value;
-                    RaisePropertyChanged("CurrentClassItemSelectedValue");
+                    RaisePropertyChanged();
                 }
             }
         }
 
         public ComboboxItem CurrentClassItem
         {
-            get { return _currentClassItem; }
+            get
+            {
+                return _currentClassItem;
+            }
+
             set
             {
                 bool changed = CheckPropertyChanged(_currentClassItem, value);
@@ -83,14 +93,18 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
                 if (changed)
                 {
                     _currentClassItem = value;
-                    RaisePropertyChanged("CurrentClassItem");
+                    RaisePropertyChanged();
                 }
             }
         }
 
         public string CurrentSubClassItemSelectedValue
         {
-            get { return _currentSubClassItemSelectedValue; }
+            get
+            {
+                return _currentSubClassItemSelectedValue;
+            }
+
             set
             {
                 bool changed = CheckPropertyChanged(_currentSubClassItemSelectedValue, value);
@@ -98,14 +112,18 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
                 if (changed)
                 {
                     _currentSubClassItemSelectedValue = value;
-                    RaisePropertyChanged("CurrentSubClassItemSelectedValue");
+                    RaisePropertyChanged();
                 }
             }
         }
 
         public ComboboxItem CurrentSubClassItem
         {
-            get { return _currentSubClassItem; }
+            get
+            {
+                return _currentSubClassItem;
+            }
+
             set
             {
                 bool changed = CheckPropertyChanged(_currentSubClassItem, value);
@@ -113,7 +131,7 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
                 if (changed)
                 {
                     _currentSubClassItem = value;
-                    RaisePropertyChanged("CurrentSubClassItem");
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -124,6 +142,7 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _searchText;
             }
+
             set
             {
                 bool changed = CheckPropertyChanged(_searchText, value);
@@ -131,7 +150,7 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
                 if (changed)
                 {
                     _searchText = value;
-                    RaisePropertyChanged("SearchText");
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -142,12 +161,13 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _categories;
             }
+
             set
             {
                 if (_categories != value)
                 {
                     _categories = value;
-                    RaisePropertyChanged("Categories");
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -158,12 +178,13 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _classes;
             }
+
             set
             {
                 if (_classes != value)
                 {
                     _classes = value;
-                    RaisePropertyChanged("Classes");
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -174,12 +195,13 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _subClasses;
             }
+
             set
             {
                 if (_subClasses != value)
                 {
                     _subClasses = value;
-                    RaisePropertyChanged("SubClasses");
+                    RaisePropertyChanged();
                 }
             }
         }
@@ -190,24 +212,25 @@ namespace SupremeRulerModdingTool.Foundation.ViewModels
             {
                 return _itemModels;
             }
+
             set
             {
                 if (_itemModels != value)
                 {
                     _itemModels = value;
-                    RaisePropertyChanged("ItemModels");
+                    RaisePropertyChanged();
                 }
             }
         }
 
-        protected bool CheckPropertyChanged<T>(T oldValue, T newValue)
+        private bool CheckPropertyChanged<T>(T oldValue, T newValue)
         {
             if (oldValue == null && newValue == null)
             {
                 return false;
             }
 
-            if ((oldValue == null && newValue != null) || (oldValue != null && newValue == null) ||!oldValue.Equals((T) newValue))
+            if ((oldValue == null && newValue != null) || (oldValue != null && newValue == null) || !oldValue.Equals(newValue))
             {
                 return true;
             }

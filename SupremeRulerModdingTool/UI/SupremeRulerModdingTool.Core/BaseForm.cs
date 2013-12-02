@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Waf.Presentation.WinForms;
+﻿using System.Waf.Presentation.WinForms;
 using System.Windows.Forms;
 
-namespace SupremeRulerModdingTool.Core
+namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 {
     public class BaseForm : Form
     {
         private readonly CommandAdapter _commandAdapter;
 
-        public BaseForm()
+        protected BaseForm()
         {
             _commandAdapter = new CommandAdapter();
         }
@@ -35,13 +28,12 @@ namespace SupremeRulerModdingTool.Core
 
         private void InitializeComponent()
         {
-            this.SuspendLayout();
-            // 
+            SuspendLayout();
+
             // BaseForm
-            // 
-            this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Name = "BaseForm";
-            this.ResumeLayout(false);
+            ClientSize = new System.Drawing.Size(284, 261);
+            Name = "BaseForm";
+            ResumeLayout(false);
         }
     }
 }
