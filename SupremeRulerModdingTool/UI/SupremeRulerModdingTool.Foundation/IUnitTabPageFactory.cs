@@ -1,9 +1,10 @@
-﻿using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
+﻿using System.ComponentModel;
+using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
 
 namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation
 {
     public interface IUnitTabPageFactory
     {
-        IUnitTabPage CreateTabPage(IUnitEditorView unitEditorView);
+        IUnitTabPage CreateTabPage(IUnitEditorView unitEditorView, IContainer container);
     }
 }

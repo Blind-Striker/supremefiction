@@ -63,6 +63,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandAdapters\CommandBindings\TabControlBinding.cs" />
+    <Compile Include="CommandAdapters\CommandBindings\ExitableTabControlBinding.cs" />
+    <Compile Include="CommandAdapters\CommandFactories\TabControlCommandBindingFactory.cs" />
+    <Compile Include="CommandAdapters\CommandFactories\ExitableTabControlCommandBindingFactory.cs" />
+    <Compile Include="ExitableTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -153,6 +160,7 @@
     <Content Include="Resources\Images\sword.png" />
     <Content Include="Resources\Images\Undo.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

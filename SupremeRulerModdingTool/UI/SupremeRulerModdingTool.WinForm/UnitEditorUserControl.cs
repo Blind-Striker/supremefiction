@@ -14,7 +14,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
             InitializeComponent();
         }
 
-        public IUnitEditorPresenter Presenter { get; set; }
+        public IUnitEditorPresenter Presenter { get; set; }       
 
         public object DataContext
         {
@@ -33,25 +33,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
         {
             base.OnLoad(e);
 
-            var unitEditorViewModel = ReBindGrid();
-
-            unitEditorViewModel.PropertyChanged += UnitEditorViewModelPropertyChanged;
-        }
-
-        private void UnitEditorViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "ItemModels")
-            {
-                ReBindGrid();
-            }
-        }
-
-        private UnitEditorViewModel ReBindGrid()
-        {
-            var unitEditorViewModel = DataContext as UnitEditorViewModel;
-
-            dataGridUnits.DataSource = unitEditorViewModel.ItemModels;
-            return unitEditorViewModel;
+            dataGridUnits.DataBindings.Add("DataSource", DataContext, "ItemModels", true, DataSourceUpdateMode.OnPropertyChanged);
         }
     }
 }

@@ -74,6 +74,7 @@
             this.splitContainer1.Panel1.Controls.Add(this.txtSearch);
             this.splitContainer1.Panel1.Controls.Add(this.lblSearch);
             this.splitContainer1.Panel1.Controls.Add(this.lblCategory);
+            this.splitContainer1.Panel1.Padding = new System.Windows.Forms.Padding(5, 0, 2, 0);
             // 
             // splitContainer1.Panel2
             // 
@@ -97,7 +98,7 @@
             // 
             // dataContext
             // 
-            this.dataContext.DataSource = typeof(SupremeRulerModdingTool.Foundation.ViewModels.UnitEditorViewModel);
+            this.dataContext.DataSource = typeof(SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels.UnitEditorViewModel);
             // 
             // categoriesBindingSource
             // 
@@ -143,7 +144,7 @@
             // lblSubClass
             // 
             this.lblSubClass.AutoSize = true;
-            this.lblSubClass.Location = new System.Drawing.Point(342, 7);
+            this.lblSubClass.Location = new System.Drawing.Point(347, 7);
             this.lblSubClass.Name = "lblSubClass";
             this.lblSubClass.Size = new System.Drawing.Size(54, 13);
             this.lblSubClass.TabIndex = 6;
@@ -152,7 +153,7 @@
             // lblClass
             // 
             this.lblClass.AutoSize = true;
-            this.lblClass.Location = new System.Drawing.Point(171, 6);
+            this.lblClass.Location = new System.Drawing.Point(176, 6);
             this.lblClass.Name = "lblClass";
             this.lblClass.Size = new System.Drawing.Size(32, 13);
             this.lblClass.TabIndex = 4;
@@ -163,16 +164,16 @@
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.dataContext, "SearchText", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.txtSearch.Location = new System.Drawing.Point(701, 3);
+            this.txtSearch.Location = new System.Drawing.Point(706, 3);
             this.txtSearch.Multiline = true;
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(339, 21);
+            this.txtSearch.Size = new System.Drawing.Size(332, 21);
             this.txtSearch.TabIndex = 3;
             // 
             // lblSearch
             // 
             this.lblSearch.AutoSize = true;
-            this.lblSearch.Location = new System.Drawing.Point(654, 6);
+            this.lblSearch.Location = new System.Drawing.Point(659, 6);
             this.lblSearch.Name = "lblSearch";
             this.lblSearch.Size = new System.Drawing.Size(41, 13);
             this.lblSearch.TabIndex = 2;
@@ -181,7 +182,7 @@
             // lblCategory
             // 
             this.lblCategory.AutoSize = true;
-            this.lblCategory.Location = new System.Drawing.Point(3, 6);
+            this.lblCategory.Location = new System.Drawing.Point(8, 6);
             this.lblCategory.Name = "lblCategory";
             this.lblCategory.Size = new System.Drawing.Size(57, 13);
             this.lblCategory.TabIndex = 1;

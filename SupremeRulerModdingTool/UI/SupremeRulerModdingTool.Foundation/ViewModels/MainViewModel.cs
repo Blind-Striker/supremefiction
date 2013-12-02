@@ -9,6 +9,11 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels
         private ICommand _createNewUnitFile;
         private ICommand _openExistingUnitFile;
         private ICommand _saveFiles;
+        private ICommand _closeTab;
+        private ICommand _selectedTabChanged;
+
+        private int _closeIndex;
+        private int _selectedTabIndex;
 
         public ICommand SelectGamePath
         {
@@ -75,6 +80,68 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels
                     _saveFiles = value;
                     RaisePropertyChanged();
                 }
+            }
+        }
+
+        public ICommand CloseTab
+        {
+            get
+            {
+                return _closeTab;
+            }
+
+            set
+            {
+                if (_closeTab != value)
+                {
+                    _closeTab = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public ICommand SelectedTabChanged
+        {
+            get
+            {
+                return _selectedTabChanged;
+            }
+
+            set
+            {
+                if (_selectedTabChanged != value)
+                {
+                    _selectedTabChanged = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public int CloseIndex
+        {
+            get
+            {
+                return _closeIndex;
+            }
+
+            set
+            {
+                _closeIndex = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int SelectedTabIndex
+        {
+            get
+            {
+                return _selectedTabIndex;
+            }
+
+            set
+            {
+                _selectedTabIndex = value;
+                RaisePropertyChanged();
             }
         }
     }

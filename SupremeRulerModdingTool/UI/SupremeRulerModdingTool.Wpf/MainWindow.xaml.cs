@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels;
@@ -25,6 +26,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Wpf
 
         public void AddTab(IUnitTabPage unitTabPage)
         {
+        }
+
+        public IEnumerable<IUnitTabPage> UnitTabPages { get; private set; }
+        public void RemoveTab(IUnitTabPage unitTabPage)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

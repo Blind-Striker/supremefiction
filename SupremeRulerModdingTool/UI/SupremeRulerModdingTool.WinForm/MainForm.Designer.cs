@@ -38,7 +38,7 @@
             this.createNewUnitFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openExistingUnitFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainStatusStrip = new System.Windows.Forms.StatusStrip();
-            this.filesTab = new System.Windows.Forms.TabControl();
+            this.filesTab = new SupremeFiction.UI.SupremeRulerModdingTool.WinForm.ExitableTabControl();
             ((System.ComponentModel.ISupportInitialize)(this.dataContext)).BeginInit();
             this.mainMenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -107,11 +107,16 @@
             // filesTab
             // 
             this.filesTab.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.filesTab.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.filesTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filesTab.ItemSize = new System.Drawing.Size(150, 24);
             this.filesTab.Location = new System.Drawing.Point(0, 24);
             this.filesTab.Name = "filesTab";
             this.filesTab.SelectedIndex = 0;
             this.filesTab.Size = new System.Drawing.Size(1122, 648);
+            this.filesTab.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.filesTab.TabIndex = 2;
+            this.filesTab.TabStop = false;
             // 
             // MainForm
             // 
@@ -124,6 +129,7 @@
             this.MainMenuStrip = this.mainMenuStrip;
             this.Name = "MainForm";
             this.Text = "MainForm";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.dataContext)).EndInit();
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
@@ -143,6 +149,6 @@
         private System.Windows.Forms.ToolStripMenuItem openExistingUnitFileToolStripMenuItem;
         private System.Windows.Forms.StatusStrip mainStatusStrip;
         private System.Windows.Forms.ToolStripMenuItem saveFilesToolStripMenuItem;
-        private System.Windows.Forms.TabControl filesTab;
+        private ExitableTabControl filesTab;
     }
 }

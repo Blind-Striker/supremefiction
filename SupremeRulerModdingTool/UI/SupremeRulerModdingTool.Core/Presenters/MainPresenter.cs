@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Waf.Applications;
 using System.Waf.Applications.Services;
 
@@ -21,8 +23,13 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
         private readonly IPresenterFactory _presenterFactory;
         private readonly IUnitTabPageFactory _unitTabPageFactory;
         private readonly MainViewModel _mainViewModel;
+
+        private Container _container;
+
         private string _mainFilesPath;
         private string _defaultUnitsFile;
+
+        private List<IUnitEditorPresenter> _unitEditorPresenters;
 
         public MainPresenter(
             IMainView view, 
@@ -33,18 +40,23 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             IUnitTabPageFactory unitTabPageFactory)
             : base(view)
         {
+            _container = new Container();
             _appSettings = appSettings;
             _messageService = messageService;
             _dialogService = dialogService;
             _presenterFactory = presenterFactory;
             _unitTabPageFactory = unitTabPageFactory;
 
+            _unitEditorPresenters = new List<IUnitEditorPresenter>();
+
             _mainViewModel = new MainViewModel
             {
                 SelectGamePath = new DelegateCommand(ShowSelectGamePathView, CanShowSelectGamePathView),
                 CreateNewUnitFile = new DelegateCommand(CreateNewUnitFile, CanCreateNewUnitFile),
                 OpenExistingUnitFile = new DelegateCommand(OpenExistingUnitFile, CanOpenExistingUnitFile),
-                SaveFiles = new DelegateCommand(SaveFiles, CanSaveFiles)
+                SaveFiles = new DelegateCommand(SaveFiles, CanSaveFiles),
+                CloseTab = new DelegateCommand(CloseTab, CanCloseTab),
+                SelectedTabChanged = new DelegateCommand(SelectedTabChanged, CanSelectedTabChanged)
             };
 
             _mainViewModel.PropertyChanged += MainViewModelPropertyChanged;
@@ -112,30 +124,34 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private bool CanCreateNewUnitFile()
         {
-            return !_mainFilesPath.IsNullOrEmpty();
+            return !EnumerableExtensions.IsNullOrEmpty(_mainFilesPath);
         }
 
         private void OpenExistingUnitFile()
         {
             string fileName = _dialogService.ShowFileDialog(this, "Unit File (*.UNIT)|*.UNIT|All files (*.*)|*.*");
 
-            if (fileName.IsNullOrEmpty())
+            if (EnumerableExtensions.IsNullOrEmpty(fileName))
             {
                 return;
             }
 
             var unitEditorPresenter = _presenterFactory.CreatePresenter<IUnitEditorPresenter>();
-            IUnitTabPage unitTabPage = _unitTabPageFactory.CreateTabPage(unitEditorPresenter.View);
+            IUnitTabPage unitTabPage = _unitTabPageFactory.CreateTabPage(unitEditorPresenter.View, _container);
+            unitEditorPresenter.UnitTabPage = unitTabPage;
+            unitEditorPresenter.UnitPath = fileName;
+            unitEditorPresenter.Name = Path.GetFileNameWithoutExtension(fileName);
             unitTabPage.TabName = Path.GetFileNameWithoutExtension(fileName);
 
             unitEditorPresenter.InitializeView(fileName);
 
+            _unitEditorPresenters.Add(unitEditorPresenter);
             View.AddTab(unitTabPage);
         }
 
         private bool CanOpenExistingUnitFile()
         {
-            return !_mainFilesPath.IsNullOrEmpty();
+            return !EnumerableExtensions.IsNullOrEmpty(_mainFilesPath);
         }
 
         private void SaveFiles()
@@ -145,7 +161,46 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private bool CanSaveFiles()
         {
-            return !_mainFilesPath.IsNullOrEmpty();
+            return !EnumerableExtensions.IsNullOrEmpty(_mainFilesPath);
+        }
+
+        private void CloseTab()
+        {
+            int closeIndex = _mainViewModel.CloseIndex;
+
+            IUnitEditorPresenter unitEditorPresenter = _unitEditorPresenters[closeIndex];
+            IUnitTabPage unitTabPage = View.UnitTabPages.ToList()[closeIndex];
+
+            bool closePage = true;
+
+            if (unitEditorPresenter.IsDirty)
+            {
+                string message = string.Format("There are unsaved changes. Do you really want to close {0} Page", unitEditorPresenter.Name);
+
+                closePage = _messageService.ShowYesNoQuestion(View, message);
+            }
+
+            if (closePage)
+            {
+                View.RemoveTab(unitTabPage);
+                _unitEditorPresenters.RemoveAt(closeIndex);
+                unitEditorPresenter.Dispose();
+            }
+        }
+
+        private bool CanCloseTab()
+        {
+            return true;
+        }
+
+        private void SelectedTabChanged()
+        {
+
+        }
+
+        private bool CanSelectedTabChanged()
+        {
+            return true;
         }
 
         private void MainViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)

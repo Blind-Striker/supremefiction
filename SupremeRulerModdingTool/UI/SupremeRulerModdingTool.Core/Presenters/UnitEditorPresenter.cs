@@ -14,10 +14,11 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 {
     internal class UnitEditorPresenter : BasePresenter<IUnitEditorView, IUnitEditorPresenter>, IUnitEditorPresenter
     {
-        private readonly UnitEditorViewModel _unitEditorViewModel;
+        private UnitEditorViewModel _unitEditorViewModel;
         private UnitFileHelper _fileHelper;
         private bool _preventEventFire;
         private int _lastLengthOfSearchText;
+        private bool isDirty;
 
         public UnitEditorPresenter(IUnitEditorView view) : base(view)
         {
@@ -26,6 +27,17 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             View.DataContext = _unitEditorViewModel;
 
             _unitEditorViewModel.PropertyChanged += UnitEditorViewModelPropertyChanged;
+        }
+
+        public IUnitTabPage UnitTabPage { get; set; }
+
+        public string UnitPath { get; set; }
+
+        public string Name { get; set; }
+
+        public bool IsDirty
+        {
+            get { return isDirty; }
         }
 
         public void InitializeView(string path)
@@ -46,6 +58,10 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             OnCurrentCategoryItemChanged();
             
             _preventEventFire = false;
+        }
+
+        public void Save()
+        {
         }
 
         private void UnitEditorViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -149,14 +165,17 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
         {
             if (_unitEditorViewModel.SearchText.Length >= 3 && _unitEditorViewModel.SearchText.Length > _lastLengthOfSearchText)
             {
-                DataTable copyToDataTable = _unitEditorViewModel.ItemModels.AsEnumerable()
-                    .Where(row =>
-                            row["Name"].ToString()
-                                .ToLowerInvariant()
-                                .Contains(_unitEditorViewModel.SearchText.ToLowerInvariant()))
-                    .CopyToDataTable();
+                DataTable copyToDataTable = null;
 
-                _unitEditorViewModel.ItemModels = copyToDataTable;
+                EnumerableRowCollection<DataRow> enumerableRowCollection = _unitEditorViewModel.ItemModels.AsEnumerable()
+                    .Where(row => row["Name"].ToString().ToLowerInvariant().Contains(_unitEditorViewModel.SearchText.ToLowerInvariant()));
+
+                if (!enumerableRowCollection.IsNullOrEmpty())
+                {
+                    copyToDataTable = enumerableRowCollection.CopyToDataTable();
+                }
+
+                SetDataTableToGrid(copyToDataTable);
             }
             else if (_lastLengthOfSearchText > _unitEditorViewModel.SearchText.Length)
             {
@@ -207,7 +226,36 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
                 dataTable.Rows.Add(dataRow);
             }
 
+            SetDataTableToGrid(dataTable);
+        }
+
+        private void SetDataTableToGrid(DataTable dataTable)
+        {
             _unitEditorViewModel.ItemModels = dataTable;
+
+            if (_unitEditorViewModel.ItemModels != null && _unitEditorViewModel.ItemModels.Rows.Count > 0)
+            {
+                _unitEditorViewModel.ItemModels.RowChanged += SetDirty;
+                _unitEditorViewModel.ItemModels.RowDeleted += SetDirty;
+                _unitEditorViewModel.ItemModels.TableNewRow += SetDirty;
+            }
+        }
+
+        private void SetDirty(object sender, object args)
+        {
+            if (!isDirty)
+            {
+                isDirty = true;
+                UnitTabPage.TabName = string.Format("{0} *", Name);
+            }
+        }
+
+        public void Dispose()
+        {
+            _preventEventFire = true;
+            _unitEditorViewModel = null;
+            _fileHelper = null;
+            _preventEventFire = false;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Waf.Applications.Services;
+using System.Waf.Presentation.WinForms;
 using System.Waf.Presentation.WinForms.Services;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
@@ -7,6 +8,7 @@ using MvpVmFramework.Core.Foundation;
 using MvpVmFramework.Core.Services;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
+using SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.CommandFactories;
 
 namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 {
@@ -14,6 +16,9 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
+            CommandAdapter.AddCommandBindingFactory(new ExitableTabControlCommandBindingFactory());
+            CommandAdapter.AddCommandBindingFactory(new TabControlCommandBindingFactory());
+
             container.Register(
                 Component.For<IMainView>().ImplementedBy<MainForm>().LifestyleTransient(),
                 Component.For<ISelectGamePathView>().ImplementedBy<SelectGamePathForm>().LifestyleTransient(),
