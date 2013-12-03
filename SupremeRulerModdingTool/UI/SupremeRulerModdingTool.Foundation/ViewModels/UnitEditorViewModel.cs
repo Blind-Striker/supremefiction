@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Windows.Input;
 using MvpVmFramework.Core.Foundation;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Models;
 
@@ -7,6 +9,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels
 {
     public class UnitEditorViewModel : BaseViewModel
     {
+        private ICommand _keyPress;
+
         private string _currentCategoryItemSelectedValue;
         private string _currentClassItemSelectedValue;
         private string _currentSubClassItemSelectedValue;
@@ -16,11 +20,68 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels
         private BindingList<ComboboxItem> _classes;
         private BindingList<ComboboxItem> _subClasses;
 
+        private IList<DataRow> _selectedRows;
+
         private ComboboxItem _currentCategoryItem;
         private ComboboxItem _currentClassItem;
         private ComboboxItem _currentSubClassItem;
 
+        private ICommand _deleteRows;
+        private ICommand _copyRows;
+        private ICommand _pasteRows;
+
         private DataTable _itemModels;
+
+        public ICommand DeleteRows
+        {
+            get
+            {
+                return _deleteRows;
+            }
+
+            set
+            {
+                if (_deleteRows != value)
+                {
+                    _deleteRows = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public ICommand CopyRows
+        {
+            get
+            {
+                return _copyRows;
+            }
+
+            set
+            {
+                if (_copyRows != value)
+                {
+                    _copyRows = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public ICommand PasteRows
+        {
+            get
+            {
+                return _pasteRows;
+            }
+
+            set
+            {
+                if (_pasteRows != value)
+                {
+                    _pasteRows = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         public string CurrentCategoryItemSelectedValue
         {
@@ -203,6 +264,20 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels
                     _subClasses = value;
                     RaisePropertyChanged();
                 }
+            }
+        }
+
+        public IList<DataRow> SelectedRows
+        {
+            get
+            {
+                return _selectedRows;
+            }
+
+            set
+            {
+                _selectedRows = value;
+                RaisePropertyChanged();
             }
         }
 

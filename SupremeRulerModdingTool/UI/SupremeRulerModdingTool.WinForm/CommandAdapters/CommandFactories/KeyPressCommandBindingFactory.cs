@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Waf.Presentation.WinForms;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -7,23 +11,23 @@ using SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.CommandB
 
 namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.CommandFactories
 {
-    public class TabControlCommandBindingFactory : CommandBindingFactory
+    public class KeyPressCommandBindingFactory : CommandBindingFactory
     {
         protected override bool CanCreateCore(Component component)
         {
-            return component is ExitableTabControl && ((ExitableTabControl)component).Identity == "TabControl";
+            return component is ContainerControl;
         }
 
         protected override CommandBindingBase CreateCore(Component component, ICommand command, Func<object> commandParameterCallback)
         {
-            var tabControl = component as TabControl;
+            var containerControl = component as ContainerControl;
 
-            if (tabControl == null)
+            if (containerControl == null)
             {
                 throw new ArgumentException("This factory cannot create a CommandBindingBase for the passed component.");
             }
 
-            return new TabControlBinding(tabControl, command, commandParameterCallback);
+            return new KeyPressCommandBinding(containerControl, command, commandParameterCallback);
         }
     }
 }

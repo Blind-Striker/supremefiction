@@ -41,9 +41,9 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
             new ItemClass { Category = "Upgrades", Class = "Facilities", SubClass = "Facility", UnitClass = 21 },
         };
 
-        private readonly List<string> _unitHeaders;
-        private readonly List<string> _missileHeaders;
-        private readonly List<string> _upgradeHeaders;
+        private readonly List<string> _unitColumns;
+        private readonly List<string> _missileColumns;
+        private readonly List<string> _upgradeColumns;
 
         private readonly Dictionary<string, IList<ItemModel>> _container;
 
@@ -68,7 +68,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                     // Units
                     if (count == 1) 
                     {
-                        _unitHeaders = GetHeader(line);
+                        _unitColumns = GetHeaderLine(line);
                         count++;
                         continue;
                     }
@@ -76,7 +76,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                     // Missiles
                     if (count == 2) 
                     {
-                        _missileHeaders = GetHeader(line);
+                        _missileColumns = GetHeaderLine(line);
                         count++;
                         continue;
                     }
@@ -84,7 +84,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                     // Upgrades
                     if (count == 3) 
                     {
-                        _upgradeHeaders = GetHeader(line);
+                        _upgradeColumns = GetHeaderLine(line);
                         count++;
                         continue;
                     }
@@ -153,7 +153,39 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
             return itemModels;
         }
 
-        private List<string> GetHeader(string headerLine)
+        public List<string> GetColumnsByCategory(string category)
+        {
+            if (category == "Units")
+            {
+                return _unitColumns;
+            }
+
+            if (category == "Missiles")
+            {
+                return _missileColumns;
+            }
+
+            if (category == "Upgrades")
+            {
+                return _upgradeColumns;
+            }
+
+            // Todo: throw exception
+
+            return null;
+        }
+
+        public List<int> GetUnitClasses(string category, string className, string subClassName)
+        {
+            return ItemClasses.Where(@class =>
+                (category.IsNullOrEmpty() || @class.Category == category) &&
+                (className.IsNullOrEmpty() || @class.Class == className) &&
+                (subClassName.IsNullOrEmpty() || @class.SubClass == subClassName))
+                .Select(@class => @class.UnitClass)
+                .ToList();
+        }
+
+        private List<string> GetHeaderLine(string headerLine)
         {
             string header = headerLine.Substring(3);
 
@@ -180,28 +212,6 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
             return category;
         }
 
-        private List<string> GetHeaderByCategory(string category)
-        {
-            if (category == "Units")
-            {
-                return _unitHeaders;
-            }
-
-            if (category == "Missiles")
-            {
-                return _missileHeaders;
-            }
-
-            if (category == "Upgrades")
-            {
-                return _upgradeHeaders;
-            }
-
-            // Todo: throw exception
-
-            return null;
-        }
-
         private void AddToContainer(string category, string[] values)
         {
             IList<ItemModel> itemModels;
@@ -213,7 +223,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                 _container.Add(category, new List<ItemModel>());
             }
 
-            List<string> headerByCategory = GetHeaderByCategory(category);
+            List<string> headerByCategory = GetColumnsByCategory(category);
 
             var model = new ItemModel();
 
@@ -240,16 +250,6 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 
 
             _container[category].Add(model);
-        }
-
-        private List<int> GetUnitClasses(string category, string className, string subClassName)
-        {
-            return ItemClasses.Where(@class =>
-                (category.IsNullOrEmpty() || @class.Category == category) &&
-                (className.IsNullOrEmpty() || @class.Class == className) &&
-                (subClassName.IsNullOrEmpty() || @class.SubClass == subClassName))
-                .Select(@class => @class.UnitClass)
-                .ToList();
         }
     }
 }

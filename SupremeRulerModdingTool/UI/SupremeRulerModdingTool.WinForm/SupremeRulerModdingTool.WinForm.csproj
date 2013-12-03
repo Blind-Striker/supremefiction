@@ -63,9 +63,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandAdapters\CommandBindings\TabControlBinding.cs" />
+    <Compile Include="CommandAdapters\CommandBindings\KeyPressCommandBinding.cs" />
+    <Compile Include="CommandAdapters\CommandBindings\TabChangedBinding.cs" />
     <Compile Include="CommandAdapters\CommandBindings\ExitableTabControlBinding.cs" />
-    <Compile Include="CommandAdapters\CommandFactories\TabControlCommandBindingFactory.cs" />
+    <Compile Include="CommandAdapters\CommandFactories\KeyPressCommandBindingFactory.cs" />
+    <Compile Include="CommandAdapters\CommandFactories\TabChangedCommandBindingFactory.cs" />
     <Compile Include="CommandAdapters\CommandFactories\ExitableTabControlCommandBindingFactory.cs" />
     <Compile Include="ExitableTabControl.cs">
       <SubType>Component</SubType>

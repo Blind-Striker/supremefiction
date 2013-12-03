@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAppSettings.cs" />
+    <Compile Include="IRowContainer.cs" />
     <Compile Include="IUnitTabPage.cs" />
     <Compile Include="IUnitTabPageFactory.cs" />
     <Compile Include="Models\ComboboxItem.cs" />

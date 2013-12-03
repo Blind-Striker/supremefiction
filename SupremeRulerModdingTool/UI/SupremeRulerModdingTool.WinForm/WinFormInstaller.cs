@@ -17,7 +17,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             CommandAdapter.AddCommandBindingFactory(new ExitableTabControlCommandBindingFactory());
-            CommandAdapter.AddCommandBindingFactory(new TabControlCommandBindingFactory());
+            CommandAdapter.AddCommandBindingFactory(new TabChangedCommandBindingFactory());
+            CommandAdapter.AddCommandBindingFactory(new KeyPressCommandBindingFactory());
 
             container.Register(
                 Component.For<IMainView>().ImplementedBy<MainForm>().LifestyleTransient(),

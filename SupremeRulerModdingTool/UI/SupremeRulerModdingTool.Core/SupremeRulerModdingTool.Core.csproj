@@ -76,6 +76,7 @@
     <Compile Include="Presenters\SelectGamePathPresenter.cs" />
     <Compile Include="Presenters\UnitEditorPresenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RowContainer.cs" />
     <Compile Include="UnitFileHelper.cs" />
   </ItemGroup>
   <ItemGroup />

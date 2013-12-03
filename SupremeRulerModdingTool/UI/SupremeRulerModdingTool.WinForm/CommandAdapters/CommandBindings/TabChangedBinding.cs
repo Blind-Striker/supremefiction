@@ -5,12 +5,12 @@ using System.Windows.Input;
 
 namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.CommandBindings
 {
-    public class TabControlBinding : CommandBindingBase
+    public class TabChangedBinding : CommandBindingBase
     {
         private TabControl _tabControl;
         private Func<object> _commandParameterCallback;
 
-        public TabControlBinding(TabControl exitableTabControl, ICommand command, Func<object> commandParameterCallback)
+        public TabChangedBinding(TabControl exitableTabControl, ICommand command, Func<object> commandParameterCallback)
             : base(exitableTabControl, command)
         {
             _tabControl = exitableTabControl;

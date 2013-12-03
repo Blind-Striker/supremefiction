@@ -22,7 +22,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                 Component.For<IMainPresenter>().ImplementedBy<MainPresenter>().LifestyleTransient(),
                 Component.For<ISelectGamePathPresenter>().ImplementedBy<SelectGamePathPresenter>().LifestyleSingleton(),
                 Component.For<IUnitEditorPresenter>().ImplementedBy<UnitEditorPresenter>().LifestyleTransient(),
-                Component.For<IAppSettings>().ImplementedBy<IsolatedStorageAppSettings>().LifestyleSingleton());
+                Component.For<IAppSettings>().ImplementedBy<IsolatedStorageAppSettings>().LifestyleSingleton(),
+                Component.For<IRowContainer>().ImplementedBy<RowContainer>().LifestyleSingleton());
         }
     }
 }

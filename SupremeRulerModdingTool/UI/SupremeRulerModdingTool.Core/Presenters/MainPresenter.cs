@@ -172,6 +172,18 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             IUnitEditorPresenter unitEditorPresenter = _unitEditorPresenters[closeIndex];
             IUnitTabPage unitTabPage = unitTabPages[closeIndex];
 
+            if (unitEditorPresenter.IsDirty)
+            {
+                string message = string.Format("There are unsaved changes. Do you really want to close {0} Page", unitEditorPresenter.Name);
+
+                bool yes = _messageService.ShowYesNoQuestion(View, message);
+
+                if (!yes)
+                {
+                    return;
+                }
+            }
+
             View.RemoveTab(unitTabPage);
             _unitEditorPresenters.RemoveAt(closeIndex);
             unitEditorPresenter.Dispose();
@@ -181,16 +193,6 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private bool CanCloseTab()
         {
-            int closeIndex = _mainViewModel.CloseIndex;
-            IUnitEditorPresenter unitEditorPresenter = _unitEditorPresenters[closeIndex];
-
-            if (unitEditorPresenter.IsDirty)
-            {
-                string message = string.Format("There are unsaved changes. Do you really want to close {0} Page", unitEditorPresenter.Name);
-
-                return _messageService.ShowYesNoQuestion(View, message);
-            }
-
             return true;
         }
 

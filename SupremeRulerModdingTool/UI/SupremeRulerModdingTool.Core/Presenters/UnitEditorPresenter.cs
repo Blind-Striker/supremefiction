@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Text;
+using System.Waf.Applications;
+using System.Waf.Applications.Services;
 using MvpVmFramework.Core.Foundation;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Models;
@@ -14,15 +17,26 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 {
     internal class UnitEditorPresenter : BasePresenter<IUnitEditorView, IUnitEditorPresenter>, IUnitEditorPresenter
     {
+        private readonly IMessageService _messageService;
+        private readonly IRowContainer _rowContainer;
+        private readonly Dictionary<string, DataTable> _dataTablesByCategory;
+
         private UnitEditorViewModel _unitEditorViewModel;
         private UnitFileHelper _fileHelper;
         private bool _preventEventFire;
-        private int _lastLengthOfSearchText;
-        private bool isDirty;
+        private bool _isDirty;
 
-        public UnitEditorPresenter(IUnitEditorView view) : base(view)
+        public UnitEditorPresenter(IUnitEditorView view, IMessageService messageService, IRowContainer rowContainer) : base(view)
         {
-            _unitEditorViewModel = new UnitEditorViewModel();
+            _messageService = messageService;
+            _rowContainer = rowContainer;
+            _dataTablesByCategory = new Dictionary<string, DataTable>();
+            _unitEditorViewModel = new UnitEditorViewModel()
+            {
+                DeleteRows = new DelegateCommand(DeleteRows),
+                CopyRows = new DelegateCommand(CopyRows),
+                PasteRows = new DelegateCommand(PasteRows, CanPasteRows)
+            };
 
             View.DataContext = _unitEditorViewModel;
 
@@ -37,31 +51,136 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         public bool IsDirty
         {
-            get { return isDirty; }
+            get { return _isDirty; }
         }
 
         public void InitializeView(string path)
         {
-            _fileHelper = new UnitFileHelper(path);
-
-            IEnumerable<ComboboxItem> categoryList = UnitFileHelper.Categories.ToComboboxItems();
-
-            var categories = new BindingList<ComboboxItem>(categoryList.ToList());
-
-            ComboboxItem category = categories[0];
-
             _preventEventFire = true;
 
-            _unitEditorViewModel.Categories = categories;
-            _unitEditorViewModel.CurrentCategoryItemSelectedValue = category.ComboboxItemValueMember;
+            _fileHelper = new UnitFileHelper(path);
+
+            List<string> categories = UnitFileHelper.Categories.ToList();
+            IEnumerable<ComboboxItem> categoryList = categories.ToComboboxItems();
+
+            var categoryBindingList = new BindingList<ComboboxItem>(categoryList.ToList());
+
+            _unitEditorViewModel.Categories = categoryBindingList;
+            _unitEditorViewModel.CurrentCategoryItemSelectedValue = categoryBindingList[0].ComboboxItemValueMember;
+
+            SetDataTables(categories);
 
             OnCurrentCategoryItemChanged();
             
             _preventEventFire = false;
         }
 
+        private void DeleteRows()
+        {
+            bool yes = _messageService.ShowYesNoQuestion(View, "Are You Sure You Want To Delete Delected Rows?");
+
+            if (!yes)
+            {
+                return;
+            }
+
+            IList<DataRow> selectedRows = _unitEditorViewModel.SelectedRows;
+
+            foreach (DataRow selectedRow in selectedRows)
+            {
+                selectedRow.Delete();
+            }
+        }
+
+        private void CopyRows()
+        {
+            string category = _unitEditorViewModel.CurrentCategoryItemSelectedValue;
+            IList<DataRow> selectedRows = _unitEditorViewModel.SelectedRows;
+            IList<DataRow> clonedRows = new List<DataRow>();
+
+            foreach (DataRow selectedRow in selectedRows)
+            {
+                DataRow cloneRow = _unitEditorViewModel.ItemModels.NewRow();
+                cloneRow.ItemArray = (object[])selectedRow.ItemArray.Clone();
+                clonedRows.Add(cloneRow);
+            }
+
+            _rowContainer.Set(category, selectedRows);
+
+            RaiseCanExecuteChanged(_unitEditorViewModel.PasteRows as DelegateCommand);
+
+            _messageService.ShowMessage(View, "Selected Rows Copied Successfully");
+        }
+
+        private void PasteRows()
+        {
+            KeyValuePair<string, IList<DataRow>>? keyValuePair = _rowContainer.Get();
+            if (keyValuePair.HasValue)
+            {
+                string key = keyValuePair.Value.Key;
+                IList<DataRow> dataRows = keyValuePair.Value.Value;
+
+                DataTable dataTable = _dataTablesByCategory[key];
+
+                foreach (DataRow dataRow in dataRows)
+                {
+                    dataTable.ImportRow(dataRow);
+                }
+            }
+        }
+
+        private bool CanPasteRows()
+        {
+            return _rowContainer.Get().HasValue;
+        }
+
         public void Save()
         {
+        }
+
+        public void Dispose()
+        {
+            _preventEventFire = true;
+            _unitEditorViewModel = null;
+            _fileHelper = null;
+            _preventEventFire = false;
+        }
+
+        private void SetDataTables(IEnumerable<string> categories)
+        {
+            foreach (var category in categories)
+            {
+                DataTable dataTable = new DataTable();
+
+                IList<ItemModel> items = _fileHelper.GetItemModels(category, null, null, null);
+
+                foreach (var column in items[0].Keys)
+                {
+                    dataTable.Columns.Add(new DataColumn(column));
+                }
+
+                foreach (var itemModel in items)
+                {
+                    DataRow dataRow = dataTable.NewRow();
+
+                    foreach (var key in itemModel.Keys)
+                    {
+                        object value = itemModel[key];
+                        dataRow[key] = value;
+                    }
+
+                    dataTable.Rows.Add(dataRow);
+                }
+
+                if (dataTable.Rows.Count > 0)
+                {
+                    dataTable.RowChanged += SetDirty;
+                    dataTable.RowDeleted += SetDirty;
+                    dataTable.TableNewRow += SetDirty;
+                }
+
+                _dataTablesByCategory.Add(category, dataTable);
+            }
         }
 
         private void UnitEditorViewModelPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -163,26 +282,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private void OnSearchTextChanged()
         {
-            if (_unitEditorViewModel.SearchText.Length >= 3 && _unitEditorViewModel.SearchText.Length > _lastLengthOfSearchText)
-            {
-                DataTable copyToDataTable = null;
-
-                EnumerableRowCollection<DataRow> enumerableRowCollection = _unitEditorViewModel.ItemModels.AsEnumerable()
-                    .Where(row => row["Name"].ToString().ToLowerInvariant().Contains(_unitEditorViewModel.SearchText.ToLowerInvariant()));
-
-                if (!enumerableRowCollection.IsNullOrEmpty())
-                {
-                    copyToDataTable = enumerableRowCollection.CopyToDataTable();
-                }
-
-                SetDataTableToGrid(copyToDataTable);
-            }
-            else if (_lastLengthOfSearchText > _unitEditorViewModel.SearchText.Length)
-            {
-                FillGrid();   
-            }
-
-            _lastLengthOfSearchText = _unitEditorViewModel.SearchText.Length;
+            FillGrid();
         }
 
         private void FillGrid()
@@ -198,64 +298,64 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
             string searchText = !_unitEditorViewModel.SearchText.IsNullOrEmpty() && _unitEditorViewModel.SearchText.Length < 3 ? null : _unitEditorViewModel.SearchText;
 
-            IList<ItemModel> itemModels = _fileHelper.GetItemModels(category, @class, subClass, searchText);
-
-            DataTable dataTable = new DataTable();
-
-            List<string> columns = new List<string>();
-            if (!itemModels.IsNullOrEmpty())
-            {
-                columns = itemModels[0].Keys.Select(s => s).ToList();   
-            }
-
-            foreach (var column in columns)
-            {
-                dataTable.Columns.Add(new DataColumn(column));
-            }
-
-            foreach (var itemModel in itemModels)
-            {
-                DataRow dataRow = dataTable.NewRow();
-
-                foreach (var key in itemModel.Keys)
-                {
-                    object value = itemModel[key];
-                    dataRow[key] = value;
-                }
-
-                dataTable.Rows.Add(dataRow);
-            }
-
-            SetDataTableToGrid(dataTable);
-        }
-
-        private void SetDataTableToGrid(DataTable dataTable)
-        {
+            DataTable dataTable = _dataTablesByCategory[category];
+            dataTable.CaseSensitive = false;
             _unitEditorViewModel.ItemModels = dataTable;
 
-            if (_unitEditorViewModel.ItemModels != null && _unitEditorViewModel.ItemModels.Rows.Count > 0)
+            string query = QueryBuilder(category, @class, subClass, searchText);
+
+            _unitEditorViewModel.ItemModels.DefaultView.RowFilter = query;
+        }
+
+        private string QueryBuilder(string category, string className, string subClassName, string searchText)
+        {
+            List<int> unitClasses = _fileHelper.GetUnitClasses(category, className, subClassName);
+
+            string unitClassQuery = null;
+            string searchQuery = null;
+            string query;
+
+            if (!unitClasses.IsNullOrEmpty())
             {
-                _unitEditorViewModel.ItemModels.RowChanged += SetDirty;
-                _unitEditorViewModel.ItemModels.RowDeleted += SetDirty;
-                _unitEditorViewModel.ItemModels.TableNewRow += SetDirty;
+                string unitClassesString = unitClasses.JoinToString(",");
+                unitClassQuery = string.Format("[Unit Class] IN ({0})", unitClassesString);
             }
+
+            if (!searchText.IsNullOrEmpty())
+            {
+                searchQuery = string.Format("[Name] LIKE '%{0}%'", searchText.ToLower());
+            }
+
+            if (!unitClassQuery.IsNullOrEmpty() && !searchQuery.IsNullOrEmpty())
+            {
+                query = string.Format("{0} AND {1}", unitClassQuery, searchQuery);
+            }
+            else if (!unitClassQuery.IsNullOrEmpty() && searchQuery.IsNullOrEmpty())
+            {
+                query = unitClassQuery;
+            }
+            else
+            {
+                query = searchQuery;
+            }
+
+            return query;
         }
 
         private void SetDirty(object sender, object args)
         {
-            if (!isDirty)
+            if (!_isDirty)
             {
-                isDirty = true;
+                _isDirty = true;
                 UnitTabPage.TabName = string.Format("{0} *", Name);
             }
         }
-
-        public void Dispose()
+        private void RaiseCanExecuteChanged(DelegateCommand delegateCommand)
         {
-            _preventEventFire = true;
-            _unitEditorViewModel = null;
-            _fileHelper = null;
-            _preventEventFire = false;
+            if (delegateCommand != null)
+            {
+                delegateCommand.RaiseCanExecuteChanged();
+            }
         }
     }
 }

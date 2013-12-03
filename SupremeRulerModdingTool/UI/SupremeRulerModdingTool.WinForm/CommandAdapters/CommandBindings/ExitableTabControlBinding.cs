@@ -11,6 +11,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.Comm
 {
     public class ExitableTabControlBinding : CommandBindingBase
     {
+        private bool _canExecute;
         private ExitableTabControl _exitableTabControl;
         private Func<object> _commandParameterCallback;
 
@@ -24,7 +25,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.Comm
 
         protected override void OnCommandCanExecuteChanged()
         {
-            Command.CanExecute(_commandParameterCallback());
+           _canExecute = Command.CanExecute(_commandParameterCallback());
         }
 
         protected override void OnComponentDisposed()
@@ -36,12 +37,10 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.Comm
 
         private void ExitableTabControlOnClose(object sender, CloseEventArgs e)
         {
-            bool canExecute = Command.CanExecute(_commandParameterCallback());
-
-            if (canExecute)
-            {
+            //if (_canExecute)
+            //{
                 Command.Execute(_commandParameterCallback());
-            }
+            //}
         }
     }
 }

@@ -526,7 +526,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 
         private bool CanDrawMenuButton(int index)
         {
-            if (((UnitTabPage)TabPages[index]).Menu != null)
+            if (index >= 0 && ((UnitTabPage)TabPages[index]).Menu != null)
             {
                 return true;
             }
