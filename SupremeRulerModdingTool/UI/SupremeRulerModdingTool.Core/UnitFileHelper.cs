@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using CodeFiction.DarkMatterFramework.Libraries.IOLibrary;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Models;
 
@@ -51,7 +52,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
         {
             _container = new Dictionary<string, IList<ItemModel>>();
 
-            string readFile = IoHelper.ReadFile(path);
+            string readFile = ReadFile(path);
 
             using (var stringReader = new StringReader(readFile))
             {
@@ -250,6 +251,14 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 
 
             _container[category].Add(model);
+        }
+
+        public static string ReadFile(string filePath)
+        {
+            using (StreamReader streamReader = new StreamReader(filePath, Encoding.GetEncoding("iso-8859-1")))
+            {
+               return streamReader.ReadToEnd();   
+            }
         }
     }
 }

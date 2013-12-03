@@ -8,10 +8,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters
     {
         IUnitTabPage UnitTabPage { get; set; }
 
-        string UnitPath { get; set; }
-
-        string Name { get; set; }
         bool IsDirty { get; }
+        string Name { get; set; }
 
         void InitializeView(string path);
 

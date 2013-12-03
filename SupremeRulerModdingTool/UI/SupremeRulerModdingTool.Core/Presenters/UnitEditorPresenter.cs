@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Waf.Applications;
 using System.Waf.Applications.Services;
 using Castle.Core.Internal;
+using CodeFiction.DarkMatterFramework.Libraries.IOLibrary;
 using MvpVmFramework.Core.Foundation;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Models;
@@ -49,18 +51,23 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         public IUnitTabPage UnitTabPage { get; set; }
 
-        public string UnitPath { get; set; }
-
-        public string Name { get; set; }
-
         public bool IsDirty
         {
             get { return _isDirty; }
         }
 
+        private string UnitPath { get; set; }
+
+        public string Name { get; set; }
+
         public void InitializeView(string path)
         {
             _preventEventFire = true;
+
+            _isDirty = false;
+            UnitPath = path;
+            Name = Path.GetFileNameWithoutExtension(path);
+            UnitTabPage.TabName = Name;
 
             _fileHelper = new UnitFileHelper(path);
 
@@ -83,6 +90,24 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
         {
             var rowBuilder = new StringBuilder();
 
+            string fileName = Path.GetFileNameWithoutExtension(UnitPath);
+            string extension = Path.GetExtension(UnitPath);
+            string directoryName = Path.GetDirectoryName(UnitPath);
+
+            string newFileName = string.Format("{0}-{1}{2}", fileName, DateTime.Now.ToString("yyyyMdhhmmss"), extension);
+            string newFilePath = Path.Combine(directoryName, newFileName);
+
+            string readFile = IoHelper.ReadFile(UnitPath);
+
+            using (StringReader reader = new StringReader(readFile))
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    string line = reader.ReadLine();
+                    rowBuilder.AppendLine(line);
+                }
+            }
+
             if (!_dataTablesByCategory.IsNullOrEmpty())
             {
                 foreach (var keyValue in _dataTablesByCategory)
@@ -90,6 +115,14 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
                     keyValue.Value.AsEnumerable().ForEach(row => rowBuilder.AppendLine(row.ItemArray.JoinToString(",")));
                 }
             }
+
+            string content = rowBuilder.ToString();
+
+            IoHelper.CreateFile(newFilePath, content);
+
+            _messageService.ShowMessage(View, string.Format("File Successfully Saved To {0}", newFilePath));
+
+            InitializeView(newFilePath);
         }
 
         public void Dispose()
@@ -165,6 +198,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private void SetDataTables(IEnumerable<string> categories)
         {
+            _dataTablesByCategory.Clear();
+
             foreach (var category in categories)
             {
                 DataTable dataTable = new DataTable();

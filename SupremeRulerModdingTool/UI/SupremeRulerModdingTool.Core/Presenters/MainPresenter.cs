@@ -137,9 +137,6 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             var unitEditorPresenter = _presenterFactory.CreatePresenter<IUnitEditorPresenter>();
             IUnitTabPage unitTabPage = _unitTabPageFactory.CreateTabPage(unitEditorPresenter.View, _container);
             unitEditorPresenter.UnitTabPage = unitTabPage;
-            unitEditorPresenter.UnitPath = fileName;
-            unitEditorPresenter.Name = Path.GetFileNameWithoutExtension(fileName);
-            unitTabPage.TabName = Path.GetFileNameWithoutExtension(fileName);
 
             unitEditorPresenter.InitializeView(fileName);
 
