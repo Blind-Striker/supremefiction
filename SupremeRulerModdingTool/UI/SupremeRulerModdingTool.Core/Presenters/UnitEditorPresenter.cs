@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Waf.Applications;
 using System.Waf.Applications.Services;
+using Castle.Core.Internal;
 using MvpVmFramework.Core.Foundation;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Models;
@@ -23,10 +24,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private UnitEditorViewModel _unitEditorViewModel;
         private UnitFileHelper _fileHelper;
+
         private bool _preventEventFire;
         private bool _isDirty;
 
-        public UnitEditorPresenter(IUnitEditorView view, IMessageService messageService, IRowContainer rowContainer) : base(view)
+        public UnitEditorPresenter(IUnitEditorView view, IMessageService messageService, IRowContainer rowContainer) 
+            : base(view)
         {
             _messageService = messageService;
             _rowContainer = rowContainer;
@@ -41,6 +44,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             View.DataContext = _unitEditorViewModel;
 
             _unitEditorViewModel.PropertyChanged += UnitEditorViewModelPropertyChanged;
+            _rowContainer.RowCopied += RowContainerOnRowCopied;
         }
 
         public IUnitTabPage UnitTabPage { get; set; }
@@ -75,6 +79,30 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             _preventEventFire = false;
         }
 
+        public void Save()
+        {
+            var rowBuilder = new StringBuilder();
+
+            if (!_dataTablesByCategory.IsNullOrEmpty())
+            {
+                foreach (var keyValue in _dataTablesByCategory)
+                {
+                    keyValue.Value.AsEnumerable().ForEach(row => rowBuilder.AppendLine(row.ItemArray.JoinToString(",")));
+                }
+            }
+        }
+
+        public void Dispose()
+        {
+            _unitEditorViewModel.PropertyChanged -= UnitEditorViewModelPropertyChanged;
+            _rowContainer.RowCopied -= RowContainerOnRowCopied;
+
+            _preventEventFire = true;
+            _unitEditorViewModel = null;
+            _fileHelper = null;
+            _preventEventFire = false;
+        }
+
         private void DeleteRows()
         {
             bool yes = _messageService.ShowYesNoQuestion(View, "Are You Sure You Want To Delete Delected Rows?");
@@ -98,6 +126,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             IList<DataRow> selectedRows = _unitEditorViewModel.SelectedRows;
             IList<DataRow> clonedRows = new List<DataRow>();
 
+            _preventEventFire = true;
             foreach (DataRow selectedRow in selectedRows)
             {
                 DataRow cloneRow = _unitEditorViewModel.ItemModels.NewRow();
@@ -105,9 +134,9 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
                 clonedRows.Add(cloneRow);
             }
 
-            _rowContainer.Set(category, selectedRows);
+            _preventEventFire = false;
 
-            RaiseCanExecuteChanged(_unitEditorViewModel.PasteRows as DelegateCommand);
+            _rowContainer.Set(category, selectedRows);
 
             _messageService.ShowMessage(View, "Selected Rows Copied Successfully");
         }
@@ -132,18 +161,6 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
         private bool CanPasteRows()
         {
             return _rowContainer.Get().HasValue;
-        }
-
-        public void Save()
-        {
-        }
-
-        public void Dispose()
-        {
-            _preventEventFire = true;
-            _unitEditorViewModel = null;
-            _fileHelper = null;
-            _preventEventFire = false;
         }
 
         private void SetDataTables(IEnumerable<string> categories)
@@ -342,14 +359,23 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             return query;
         }
 
+        private void RowContainerOnRowCopied(object sender, EventArgs eventArgs)
+        {
+            if (_unitEditorViewModel != null)
+            {
+                RaiseCanExecuteChanged(_unitEditorViewModel.PasteRows as DelegateCommand);
+            }
+        }
+
         private void SetDirty(object sender, object args)
         {
-            if (!_isDirty)
+            if (!_isDirty && !_preventEventFire)
             {
                 _isDirty = true;
                 UnitTabPage.TabName = string.Format("{0} *", Name);
             }
         }
+
         private void RaiseCanExecuteChanged(DelegateCommand delegateCommand)
         {
             if (delegateCommand != null)

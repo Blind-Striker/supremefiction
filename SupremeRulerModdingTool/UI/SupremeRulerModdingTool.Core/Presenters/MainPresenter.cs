@@ -153,14 +153,26 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
         }
 
         private void SaveFiles()
-        {
+        {            
+            int selectedTabIndex = _mainViewModel.SelectedTabIndex;
+
+            if (selectedTabIndex < 0)
+            {
+                return;
+            }
+
+            IUnitEditorPresenter unitEditorPresenter = _unitEditorPresenters[selectedTabIndex];
+
+            unitEditorPresenter.Save();
         }
 
         private bool CanSaveFiles()
         {      
-            List<IUnitTabPage> unitTabPages = View.UnitTabPages.ToList();
+            //List<IUnitTabPage> unitTabPages = View.UnitTabPages.ToList();
 
-            return !_mainFilesPath.IsNullOrEmpty() && unitTabPages.Count > 0;
+            //return !_mainFilesPath.IsNullOrEmpty() && unitTabPages.Count > 0;
+
+            return true;
         }
 
         private void CloseTab()

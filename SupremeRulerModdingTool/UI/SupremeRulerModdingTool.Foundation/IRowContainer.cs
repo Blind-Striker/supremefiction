@@ -9,6 +9,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation
 {
     public interface IRowContainer
     {
+        event EventHandler RowCopied;
+
         void Set(string category, IList<DataRow> rows);
 
         KeyValuePair<string, IList<DataRow>>? Get();
