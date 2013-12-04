@@ -70,6 +70,11 @@
     <Compile Include="BaseForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Columns.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Columns.resx</DependentUpon>
+    </Compile>
     <Compile Include="CoreInstaller.cs" />
     <Compile Include="IsolatedStorageAppSettings.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
@@ -86,6 +91,10 @@
   <ItemGroup>
     <EmbeddedResource Include="BaseForm.resx">
       <DependentUpon>BaseForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Columns.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Columns.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

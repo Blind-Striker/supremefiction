@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -94,49 +95,53 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 
         public void InitColumns(string defaultUnitFilePath)
         {
-            string readFile = ReadFile(defaultUnitFilePath);
+            _unitColumns = GetHeaderLine(Columns.UNITS);
+            _missileColumns = GetHeaderLine(Columns.Missiles);
+            _upgradeColumns = GetHeaderLine(Columns.upgrades);
 
-            using (var stringReader = new StringReader(readFile))
-            {
-                int count = 0;
-                string line;
-                while ((line = stringReader.ReadLine()) != null)
-                {
-                    if (count > 4)
-                    {
-                        break;
-                    }
+            //string readFile = ReadFile(defaultUnitFilePath);
 
-                    if (count == 0 || count == 4)
-                    {
-                        count++;
-                        continue;
-                    }
+            //using (var stringReader = new StringReader(readFile))
+            //{
+            //    int count = 0;
+            //    string line;
+            //    while ((line = stringReader.ReadLine()) != null)
+            //    {
+            //        if (count > 4)
+            //        {
+            //            break;
+            //        }
 
-                    // Units
-                    if (count == 1)
-                    {
-                        _unitColumns = GetHeaderLine(line);
-                        count++;
-                        continue;
-                    }
+            //        if (count == 0 || count == 4)
+            //        {
+            //            count++;
+            //            continue;
+            //        }
 
-                    // Missiles
-                    if (count == 2)
-                    {
-                        _missileColumns = GetHeaderLine(line);
-                        count++;
-                        continue;
-                    }
+            //        // Units
+            //        if (count == 1)
+            //        {
+            //            _unitColumns = GetHeaderLine(line);
+            //            count++;
+            //            continue;
+            //        }
 
-                    // Upgrades
-                    if (count == 3)
-                    {
-                        _upgradeColumns = GetHeaderLine(line);
-                        count++;
-                    }
-                }
-            }
+            //        // Missiles
+            //        if (count == 2)
+            //        {
+            //            _missileColumns = GetHeaderLine(line);
+            //            count++;
+            //            continue;
+            //        }
+
+            //        // Upgrades
+            //        if (count == 3)
+            //        {
+            //            _upgradeColumns = GetHeaderLine(line);
+            //            count++;
+            //        }
+            //    }
+            //}
         }
 
         public void Init(string path)
@@ -149,7 +154,16 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                 string line;
                 while ((line = stringReader.ReadLine()) != null)
                 {
-                    if (count <= 4)
+                    int integer;
+                    bool isInteger = int.TryParse(line[0].ToString(CultureInfo.InvariantCulture), out integer);
+
+                    //if (count <= 4)
+                    //{
+                    //    count++;
+                    //    continue;
+                    //}
+
+                    if (!isInteger)
                     {
                         count++;
                         continue;
@@ -292,6 +306,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
             }
 
             List<string> columns = GetColumnsByCategory(category);
+
+            // TODO : Last minute change. Adding support for Supreme Ruler 2020 file. Ugly code will be removed
+            if (columns.Count == 134 && values.Length == 133) // Supreme Ruler 2020
+            {
+                columns.RemoveAt(columns.Count - 1);
+            }
 
             var model = new ItemModel();
 
