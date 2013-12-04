@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -134,7 +135,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
         {
             string fileName = _promptDialog.ShowDialog("File Name", "Please Enter File Name");
 
-            if (fileName.IsNullOrEmpty())
+            if (EnumerableExtensions.IsNullOrEmpty(fileName))
             {
                 return;
             }
@@ -145,14 +146,14 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private bool CanCreateNewUnitFile()
         {
-            return !_mainFilesPath.IsNullOrEmpty();
+            return !EnumerableExtensions.IsNullOrEmpty(_mainFilesPath);
         }
 
         private void OnOpenExistingUnitFile()
         {
             string filePath = _dialogService.ShowFileDialog(this, "Unit File (*.UNIT)|*.UNIT|All files (*.*)|*.*");
 
-            if (filePath.IsNullOrEmpty())
+            if (EnumerableExtensions.IsNullOrEmpty(filePath))
             {
                 return;
             }
@@ -163,7 +164,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private bool CanOpenExistingUnitFile()
         {
-            return !_mainFilesPath.IsNullOrEmpty();
+            return !EnumerableExtensions.IsNullOrEmpty(_mainFilesPath);
         }
 
         private void OnSaveFiles()
@@ -184,7 +185,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
         {
             List<IUnitTabPage> unitTabPages = View.UnitTabPages.ToList();
 
-            return !_mainFilesPath.IsNullOrEmpty() && unitTabPages.Count > 0;
+            return !EnumerableExtensions.IsNullOrEmpty(_mainFilesPath) && unitTabPages.Count > 0;
         }
 
         private void OnCloseTab()
@@ -213,26 +214,26 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             KeyEventArgs keyEventArgs = _mainViewModel.KeyEventArgs;
             int selectedTabIndex = _mainViewModel.SelectedTabIndex;
 
-            //if (_unitEditorPresenters.IsNullOrEmpty())
-            //{
-            //    return;
-            //}
+            if (_unitEditorPresenters.IsNullOrEmpty())
+            {
+                return;
+            }
 
-            //IUnitEditorPresenter unitEditorPresenter = _unitEditorPresenters[selectedTabIndex];
+            IUnitEditorPresenter unitEditorPresenter = _unitEditorPresenters[selectedTabIndex];
 
             if(keyEventArgs.KeyData == (Keys.Control | Keys.C))
             {
-                //unitEditorPresenter.CopyRows();
+                unitEditorPresenter.CopyRows();
             }
 
             if (keyEventArgs.KeyData == (Keys.Control | Keys.V))
             {
-                //unitEditorPresenter.PasteRows();
+                unitEditorPresenter.PasteRows();
             }
 
             if (keyEventArgs.KeyCode == Keys.Delete)
             {
-                //unitEditorPresenter.DeleteRows();
+                unitEditorPresenter.DeleteRows();
             }
         }
 

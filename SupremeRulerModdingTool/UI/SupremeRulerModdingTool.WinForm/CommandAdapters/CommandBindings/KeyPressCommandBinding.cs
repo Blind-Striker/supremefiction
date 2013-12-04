@@ -7,20 +7,21 @@ using System.Threading.Tasks;
 using System.Waf.Presentation.WinForms;
 using System.Windows.Forms;
 using System.Windows.Input;
+using SupremeFiction.UI.SupremeRulerModdingTool.WinForm.HotKey;
 
 namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.CommandBindings
 {
     public class KeyPressCommandBinding : CommandBindingBase
     {
-        private ContainerControl _containerControl;
+        private HotKeyManager _hotKeyManager;
         private Func<object> _commandParameterCallback;
 
-        public KeyPressCommandBinding(ContainerControl containerControl, ICommand command, Func<object> commandParameterCallback)
-            : base(containerControl, command)
+        public KeyPressCommandBinding(HotKeyManager hotKeyManager, ICommand command, Func<object> commandParameterCallback)
+            : base(hotKeyManager, command)
         {
-            _containerControl = containerControl;
+            _hotKeyManager = hotKeyManager;
             _commandParameterCallback = commandParameterCallback;
-            _containerControl.KeyDown += ContainerControlKeyDown;
+            _hotKeyManager.LocalHotKeyPressed += HotKeyManagerOnLocalHotKeyPressed;
         }
 
         protected override void OnCommandCanExecuteChanged()
@@ -30,14 +31,14 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.Comm
 
         protected override void OnComponentDisposed()
         {
-            _containerControl.KeyDown -= ContainerControlKeyDown;
-            _containerControl = null;
+            _hotKeyManager.LocalHotKeyPressed -= HotKeyManagerOnLocalHotKeyPressed;
+            _hotKeyManager = null;
             _commandParameterCallback = null;
         }
 
-        private void ContainerControlKeyDown(object sender, KeyEventArgs e)
+        private void HotKeyManagerOnLocalHotKeyPressed(object sender, LocalHotKeyEventArgs localHotKeyEventArgs)
         {
-            Command.Execute(_commandParameterCallback);
+            Command.Execute(_commandParameterCallback());
         }
     }
 }

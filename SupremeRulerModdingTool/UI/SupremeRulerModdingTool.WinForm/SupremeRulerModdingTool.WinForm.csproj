@@ -41,6 +41,7 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\..\..\packages\Castle.Windsor.3.2.1\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="MvpVmFramework.Core">
       <HintPath>..\..\..\SharedLibs\MvpVmFramework.Core.dll</HintPath>
     </Reference>
@@ -72,6 +73,16 @@
     <Compile Include="ExitableTabControl.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="HotKey\EnumsAndStructs.cs" />
+    <Compile Include="HotKey\EventArgs.cs" />
+    <Compile Include="HotKey\EventHandlers.cs" />
+    <Compile Include="HotKey\Exceptions.cs" />
+    <Compile Include="HotKey\HotKeyManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="HotKey\Helpers.cs" />
+    <Compile Include="HotKey\HotKeys.cs" />
+    <Compile Include="HotKey\Win32.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

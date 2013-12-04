@@ -79,25 +79,5 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 
             unitEditorViewModel.SelectedRows = list;
         }
-
-        private void DataGridUnitsKeyPress(object sender, KeyPressEventArgs e)
-        {
-            PressedKey = e.KeyChar;
-        }
-
-        private void UnitEditorUserControl_KeyPress(object sender, KeyPressEventArgs e)
-        {
-
-        }
-
-        private void UnitEditorUserControl_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
-
-        private void dataGridUnits_KeyDown(object sender, KeyEventArgs e)
-        {
-
-        }
     }
 }

@@ -198,14 +198,12 @@
             this.dataGridUnits.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridUnits.ContextMenuStrip = this.cntGridItems;
             this.dataGridUnits.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridUnits.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.dataGridUnits.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnF2;
             this.dataGridUnits.Location = new System.Drawing.Point(0, 0);
             this.dataGridUnits.Name = "dataGridUnits";
             this.dataGridUnits.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridUnits.Size = new System.Drawing.Size(1043, 473);
             this.dataGridUnits.TabIndex = 0;
-            this.dataGridUnits.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridUnits_KeyDown);
-            this.dataGridUnits.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridUnitsKeyPress);
             // 
             // cntGridItems
             // 
@@ -245,8 +243,6 @@
             this.Controls.Add(this.splitContainer1);
             this.Name = "UnitEditorUserControl";
             this.Size = new System.Drawing.Size(1043, 505);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UnitEditorUserControl_KeyDown);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.UnitEditorUserControl_KeyPress);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);

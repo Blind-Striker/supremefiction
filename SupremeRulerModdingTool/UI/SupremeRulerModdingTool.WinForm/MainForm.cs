@@ -8,14 +8,26 @@ using SupremeFiction.UI.SupremeRulerModdingTool.Foundation;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
+using SupremeFiction.UI.SupremeRulerModdingTool.WinForm.HotKey;
 
 namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 {
     public partial class MainForm : BaseForm, IMainView
     {
+        private HotKeyManager hotKeyManager;
+
+        private readonly LocalHotKey _copyHotKey = new LocalHotKey("Copy", Modifiers.Control, Keys.C);
+        private readonly LocalHotKey _pasteHotKey = new LocalHotKey("Paste", Modifiers.Control, Keys.V);
+        private readonly LocalHotKey _deleteHotKey = new LocalHotKey("Delete", Keys.Delete);
         public MainForm()
         {
             InitializeComponent();
+            hotKeyManager = new HotKeyManager(this);
+            hotKeyManager.AddLocalHotKey(_copyHotKey);
+            hotKeyManager.AddLocalHotKey(_pasteHotKey);
+            hotKeyManager.AddLocalHotKey(_deleteHotKey);
+
+            hotKeyManager.LocalHotKeyPressed += HotKeyManagerLocalHotKeyPressed;
         }
 
         public IMainPresenter Presenter { get; set; }
@@ -46,9 +58,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
 
         public void AddTab(IUnitTabPage unitTabPage)
         {
+            var mainViewModel = DataContext as MainViewModel;
+
             filesTab.Location = new Point(4, 28);
             var tabPage = unitTabPage as TabPage;
             filesTab.TabPages.Add(tabPage);
+            mainViewModel.SelectedTabIndex = filesTab.SelectedIndex;
         }
 
         public void RemoveTab(IUnitTabPage unitTabPage)
@@ -79,7 +94,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
             CommandAdapter.AddCommandBinding(openUnitFileToolStripMenuItem, mainViewModel.OpenExistingUnitFileCommand);
             CommandAdapter.AddCommandBinding(saveUnitFileToolStripMenuItem, mainViewModel.SaveSelectedTabCommand);
 
-            CommandAdapter.AddCommandBinding(this, mainViewModel.KeyPressCommand);
+            CommandAdapter.AddCommandBinding(hotKeyManager, mainViewModel.KeyPressCommand);
 
             filesTab.Identity = "ExitableTabControl";
             CommandAdapter.AddCommandBinding(filesTab, mainViewModel.CloseTabCommand, () => mainViewModel.CloseIndex = filesTab.SelectedIndex);
@@ -87,32 +102,33 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
             CommandAdapter.AddCommandBinding(filesTab, mainViewModel.SelectedTabChangedCommand, () => mainViewModel.SelectedTabIndex = filesTab.SelectedIndex);
         }
 
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        private void HotKeyManagerLocalHotKeyPressed(object sender, LocalHotKeyEventArgs e)
         {
             var mainViewModel = DataContext as MainViewModel;
-            mainViewModel.KeyEventArgs = e;
+
+            Keys modiferKey = GetModiferKey(e.HotKey.Modifier);
+
+            Keys keys = e.HotKey.Key | modiferKey;
+            mainViewModel.KeyEventArgs = new KeyEventArgs(keys);
         }
 
-        private void MainForm_KeyPress(object sender, KeyPressEventArgs e)
+        public static Keys GetModiferKey(Modifiers mod)
         {
-
+            switch (mod)
+            {
+                case Modifiers.Control:
+                    return Keys.Control;
+                case Modifiers.Alt:
+                    return Keys.Alt;
+                case Modifiers.None:
+                    return Keys.None;
+                case Modifiers.Shift:
+                    return Keys.Shift;
+                case Modifiers.Win:
+                    return Keys.LWin;
+                default:
+                    return Keys.None;
+            }
         }
-
-        //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        //{
-        //    switch (msg.Msg)
-        //    {
-        //        case 0x100:
-        //        case 0x104:
-        //            switch (keyData)
-        //            {
-        //                case Keys.Control | Keys.C:
-        //                    MessageBox.Show("Ctrl + C pressed");
-        //                    break;
-        //            }
-        //            break;
-        //    }
-        //    return base.ProcessCmdKey(ref msg, keyData);
-        //}
     }
 }

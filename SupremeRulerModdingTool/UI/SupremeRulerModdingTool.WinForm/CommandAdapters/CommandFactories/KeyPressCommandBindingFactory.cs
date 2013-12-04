@@ -8,6 +8,7 @@ using System.Waf.Presentation.WinForms;
 using System.Windows.Forms;
 using System.Windows.Input;
 using SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.CommandBindings;
+using SupremeFiction.UI.SupremeRulerModdingTool.WinForm.HotKey;
 
 namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.CommandFactories
 {
@@ -15,12 +16,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.Comm
     {
         protected override bool CanCreateCore(Component component)
         {
-            return component is ContainerControl;
+            return component is HotKeyManager;
         }
 
         protected override CommandBindingBase CreateCore(Component component, ICommand command, Func<object> commandParameterCallback)
         {
-            var containerControl = component as ContainerControl;
+            var containerControl = component as HotKeyManager;
 
             if (containerControl == null)
             {
