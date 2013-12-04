@@ -20,7 +20,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.Comm
         {
             _containerControl = containerControl;
             _commandParameterCallback = commandParameterCallback;
-            _containerControl.KeyPress += ContainerControlKeyPress;
+            _containerControl.KeyDown += ContainerControlKeyDown;
         }
 
         protected override void OnCommandCanExecuteChanged()
@@ -30,11 +30,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm.CommandAdapters.Comm
 
         protected override void OnComponentDisposed()
         {
-            _containerControl.KeyPress -= ContainerControlKeyPress;
+            _containerControl.KeyDown -= ContainerControlKeyDown;
             _containerControl = null;
             _commandParameterCallback = null;
         }
-        private void ContainerControlKeyPress(object sender, KeyPressEventArgs e)
+
+        private void ContainerControlKeyDown(object sender, KeyEventArgs e)
         {
             Command.Execute(_commandParameterCallback);
         }

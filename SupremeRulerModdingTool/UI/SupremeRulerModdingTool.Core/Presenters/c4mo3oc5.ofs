@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
@@ -22,25 +23,26 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
     {
         private readonly IMessageService _messageService;
         private readonly IRowContainer _rowContainer;
+        private readonly IAppSettings _appSettings;
         private readonly Dictionary<string, DataTable> _dataTablesByCategory;
-        private readonly List<string> _categories; 
-
-        private readonly string _defaultUnitFilePath;
-        private readonly string _dataFolder;
 
         private UnitEditorViewModel _unitEditorViewModel;
         private UnitFileHelper _fileHelper;
 
         private bool _preventEventFire;
         private bool _isDirty;
+        private string _gamePath;
+        private string _defaultUnitFilePath;
+        private List<string> _categories; 
         
         public UnitEditorPresenter(IUnitEditorView view, IMessageService messageService, IRowContainer rowContainer, IAppSettings appSettings) 
             : base(view)
         {
             _messageService = messageService;
             _rowContainer = rowContainer;
+            _appSettings = appSettings;
             _dataTablesByCategory = new Dictionary<string, DataTable>();
-            _unitEditorViewModel = new UnitEditorViewModel
+            _unitEditorViewModel = new UnitEditorViewModel()
             {
                 DeleteRows = new DelegateCommand(DeleteRows),
                 CopyRows = new DelegateCommand(CopyRows),
@@ -49,9 +51,9 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
             View.DataContext = _unitEditorViewModel;
 
-            string gamePath = appSettings["GamePath"].ToString();
-            _dataFolder = Path.Combine(gamePath, "Maps", "Data");
-            _defaultUnitFilePath = Path.Combine(_dataFolder, "DEFAULT.UNIT");
+            string _gamePath = appSettings["GamePath"].ToString();
+            string dataFolder = Path.Combine(_gamePath, "Maps", "Data");
+            _defaultUnitFilePath = Path.Combine(dataFolder, "DEFAULT.UNIT");
             _fileHelper = new UnitFileHelper(_defaultUnitFilePath);
             _categories = UnitFileHelper.Categories.ToList();
 
@@ -92,17 +94,14 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
             string fileName = Name;
             const string Extension = ".UNIT";
-            string directoryName = _dataFolder;
+            string directoryName = _gamePath;
 
-            string newFileName = !UnitPath.IsNullOrEmpty() 
-                ? string.Format("{0}-{1}{2}", fileName, DateTime.Now.ToString("yyyyMdhhmmss"), Extension) 
-                : string.Format("{0}{1}", fileName, Extension);
-
+            string newFileName = string.Format("{0}-{1}{2}", fileName, DateTime.Now.ToString("yyyyMdhhmmss"), Extension);
             string newFilePath = Path.Combine(directoryName, newFileName);
 
-            string readFile = IoHelper.ReadFile(_defaultUnitFilePath);
+            string readFile = IoHelper.ReadFile(UnitPath);
 
-            using (var reader = new StringReader(readFile))
+            using (StringReader reader = new StringReader(readFile))
             {
                 for (int i = 0; i < 5; i++)
                 {
@@ -161,13 +160,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             _preventEventFire = false;
         }
 
-        public void DeleteRows()
+        private void DeleteRows()
         {
-            if (_unitEditorViewModel.SelectedRows.IsNullOrEmpty())
-            {
-                return;
-            }
-
             bool yes = _messageService.ShowYesNoQuestion(View, "Are You Sure You Want To Delete Delected Rows?");
 
             if (!yes)
@@ -183,7 +177,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             }
         }
 
-        public void CopyRows()
+        private void CopyRows()
         {
             string category = _unitEditorViewModel.CurrentCategoryItemSelectedValue;
             IList<DataRow> selectedRows = _unitEditorViewModel.SelectedRows;
@@ -204,7 +198,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             _messageService.ShowMessage(View, "Selected Rows Copied Successfully");
         }
 
-        public void PasteRows()
+        private void PasteRows()
         {
             KeyValuePair<string, IList<DataRow>>? keyValuePair = _rowContainer.Get();
             if (keyValuePair.HasValue)

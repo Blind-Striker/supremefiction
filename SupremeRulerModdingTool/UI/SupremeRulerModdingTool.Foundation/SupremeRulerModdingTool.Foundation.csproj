@@ -38,6 +38,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IAppSettings.cs" />
+    <Compile Include="IPromptDialog.cs" />
     <Compile Include="IRowContainer.cs" />
     <Compile Include="IUnitTabPage.cs" />
     <Compile Include="IUnitTabPageFactory.cs" />

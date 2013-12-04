@@ -33,10 +33,11 @@
             this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.selectGameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.unitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createNewUnitFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openExistingUnitFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sep1 = new System.Windows.Forms.ToolStripSeparator();
+            this.openUnitFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newUnitFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveUnitFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainStatusStrip = new System.Windows.Forms.StatusStrip();
             this.filesTab = new SupremeFiction.UI.SupremeRulerModdingTool.WinForm.ExitableTabControl();
             ((System.ComponentModel.ISupportInitialize)(this.dataContext)).BeginInit();
@@ -46,8 +47,7 @@
             // mainMenuStrip
             // 
             this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.unitToolStripMenuItem});
+            this.fileToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
             this.mainMenuStrip.Size = new System.Drawing.Size(1122, 24);
@@ -58,7 +58,11 @@
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectGameToolStripMenuItem,
-            this.saveFilesToolStripMenuItem});
+            this.sep1,
+            this.openUnitFileToolStripMenuItem,
+            this.newUnitFileToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.saveUnitFileToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -66,35 +70,36 @@
             // selectGameToolStripMenuItem
             // 
             this.selectGameToolStripMenuItem.Name = "selectGameToolStripMenuItem";
-            this.selectGameToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.selectGameToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.selectGameToolStripMenuItem.Text = "Select Game";
             // 
-            // saveFilesToolStripMenuItem
+            // sep1
             // 
-            this.saveFilesToolStripMenuItem.Name = "saveFilesToolStripMenuItem";
-            this.saveFilesToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
-            this.saveFilesToolStripMenuItem.Text = "Save Files";
+            this.sep1.Name = "sep1";
+            this.sep1.Size = new System.Drawing.Size(146, 6);
             // 
-            // unitToolStripMenuItem
+            // openUnitFileToolStripMenuItem
             // 
-            this.unitToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createNewUnitFileToolStripMenuItem,
-            this.openExistingUnitFileToolStripMenuItem});
-            this.unitToolStripMenuItem.Name = "unitToolStripMenuItem";
-            this.unitToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
-            this.unitToolStripMenuItem.Text = "Unit";
+            this.openUnitFileToolStripMenuItem.Name = "openUnitFileToolStripMenuItem";
+            this.openUnitFileToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.openUnitFileToolStripMenuItem.Text = "Open Unit File";
             // 
-            // createNewUnitFileToolStripMenuItem
+            // newUnitFileToolStripMenuItem
             // 
-            this.createNewUnitFileToolStripMenuItem.Name = "createNewUnitFileToolStripMenuItem";
-            this.createNewUnitFileToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.createNewUnitFileToolStripMenuItem.Text = "Create New Unit File";
+            this.newUnitFileToolStripMenuItem.Name = "newUnitFileToolStripMenuItem";
+            this.newUnitFileToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.newUnitFileToolStripMenuItem.Text = "New Unit File";
             // 
-            // openExistingUnitFileToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.openExistingUnitFileToolStripMenuItem.Name = "openExistingUnitFileToolStripMenuItem";
-            this.openExistingUnitFileToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.openExistingUnitFileToolStripMenuItem.Text = "Open Existing Unit File";
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(146, 6);
+            // 
+            // saveUnitFileToolStripMenuItem
+            // 
+            this.saveUnitFileToolStripMenuItem.Name = "saveUnitFileToolStripMenuItem";
+            this.saveUnitFileToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.saveUnitFileToolStripMenuItem.Text = "Save  Unit File";
             // 
             // mainStatusStrip
             // 
@@ -109,6 +114,7 @@
             this.filesTab.Dock = System.Windows.Forms.DockStyle.Fill;
             this.filesTab.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this.filesTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filesTab.Identity = null;
             this.filesTab.ItemSize = new System.Drawing.Size(150, 24);
             this.filesTab.Location = new System.Drawing.Point(0, 24);
             this.filesTab.Name = "filesTab";
@@ -130,6 +136,8 @@
             this.Name = "MainForm";
             this.Text = "MainForm";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.MainForm_KeyPress);
             ((System.ComponentModel.ISupportInitialize)(this.dataContext)).EndInit();
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
@@ -144,11 +152,12 @@
         private System.Windows.Forms.MenuStrip mainMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem selectGameToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem unitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem createNewUnitFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem openExistingUnitFileToolStripMenuItem;
         private System.Windows.Forms.StatusStrip mainStatusStrip;
-        private System.Windows.Forms.ToolStripMenuItem saveFilesToolStripMenuItem;
         private ExitableTabControl filesTab;
+        private System.Windows.Forms.ToolStripSeparator sep1;
+        private System.Windows.Forms.ToolStripMenuItem openUnitFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newUnitFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem saveUnitFileToolStripMenuItem;
     }
 }

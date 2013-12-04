@@ -28,6 +28,11 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Wpf
         {
         }
 
+        public void RemoveAllTabs()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public IEnumerable<IUnitTabPage> UnitTabPages { get; private set; }
         public void RemoveTab(IUnitTabPage unitTabPage)
         {

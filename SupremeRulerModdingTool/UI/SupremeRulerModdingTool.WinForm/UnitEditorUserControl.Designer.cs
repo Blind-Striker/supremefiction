@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.cmbCategories = new System.Windows.Forms.ComboBox();
+            this.dataContext = new System.Windows.Forms.BindingSource(this.components);
             this.categoriesBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.cmbSubClass = new System.Windows.Forms.ComboBox();
             this.subClassesBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -45,19 +46,18 @@
             this.cntGridItems = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.countDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataContext = new System.Windows.Forms.BindingSource(this.components);
             this.pasteRowsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.countDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataContext)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.categoriesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subClassesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.classesBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridUnits)).BeginInit();
             this.cntGridItems.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataContext)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -100,6 +100,10 @@
             this.cmbCategories.Size = new System.Drawing.Size(99, 21);
             this.cmbCategories.TabIndex = 9;
             this.cmbCategories.ValueMember = "ComboboxItemValueMember";
+            // 
+            // dataContext
+            // 
+            this.dataContext.DataSource = typeof(SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels.UnitEditorViewModel);
             // 
             // categoriesBindingSource
             // 
@@ -200,6 +204,7 @@
             this.dataGridUnits.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridUnits.Size = new System.Drawing.Size(1043, 473);
             this.dataGridUnits.TabIndex = 0;
+            this.dataGridUnits.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dataGridUnits_KeyDown);
             this.dataGridUnits.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.DataGridUnitsKeyPress);
             // 
             // cntGridItems
@@ -209,33 +214,29 @@
             this.deleteRowsToolStripMenuItem,
             this.pasteRowsToolStripMenuItem});
             this.cntGridItems.Name = "cntGridItems";
-            this.cntGridItems.Size = new System.Drawing.Size(153, 92);
+            this.cntGridItems.Size = new System.Drawing.Size(139, 70);
             // 
             // copyRowsToolStripMenuItem
             // 
-            this.copyRowsToolStripMenuItem.Name = "copyToolStripMenuItem";
-            this.copyRowsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.copyRowsToolStripMenuItem.Name = "copyRowsToolStripMenuItem";
+            this.copyRowsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.copyRowsToolStripMenuItem.Text = "Copy Rows";
             // 
             // deleteRowsToolStripMenuItem
             // 
-            this.deleteRowsToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteRowsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteRowsToolStripMenuItem.Name = "deleteRowsToolStripMenuItem";
+            this.deleteRowsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.deleteRowsToolStripMenuItem.Text = "Delete Rows";
-            // 
-            // countDataGridViewTextBoxColumn
-            // 
-            this.countDataGridViewTextBoxColumn.Name = "countDataGridViewTextBoxColumn";
-            // 
-            // dataContext
-            // 
-            this.dataContext.DataSource = typeof(SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels.UnitEditorViewModel);
             // 
             // pasteRowsToolStripMenuItem
             // 
             this.pasteRowsToolStripMenuItem.Name = "pasteRowsToolStripMenuItem";
-            this.pasteRowsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.pasteRowsToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.pasteRowsToolStripMenuItem.Text = "Paste Rows";
+            // 
+            // countDataGridViewTextBoxColumn
+            // 
+            this.countDataGridViewTextBoxColumn.Name = "countDataGridViewTextBoxColumn";
             // 
             // UnitEditorUserControl
             // 
@@ -244,17 +245,19 @@
             this.Controls.Add(this.splitContainer1);
             this.Name = "UnitEditorUserControl";
             this.Size = new System.Drawing.Size(1043, 505);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.UnitEditorUserControl_KeyDown);
+            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.UnitEditorUserControl_KeyPress);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataContext)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.categoriesBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.subClassesBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.classesBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridUnits)).EndInit();
             this.cntGridItems.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataContext)).EndInit();
             this.ResumeLayout(false);
 
         }

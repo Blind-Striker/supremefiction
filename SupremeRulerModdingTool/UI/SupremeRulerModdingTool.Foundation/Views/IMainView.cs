@@ -7,8 +7,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views
 {
     public interface IMainView : IPresenteredView<IMainPresenter>
     {
-        void AddTab(IUnitTabPage unitTabPage);
         IEnumerable<IUnitTabPage> UnitTabPages { get; }
+
         void RemoveTab(IUnitTabPage unitTabPage);
+
+        void AddTab(IUnitTabPage unitTabPage);
+
+        void RemoveAllTabs();
     }
 }

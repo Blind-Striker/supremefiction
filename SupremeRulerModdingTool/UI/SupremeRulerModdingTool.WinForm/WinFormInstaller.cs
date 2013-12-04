@@ -26,7 +26,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
                 Component.For<IUnitEditorView>().ImplementedBy<UnitEditorUserControl>().LifestyleTransient(),
                 Component.For<IMessageService>().ImplementedBy<MessageService>().LifestyleTransient(),
                 Component.For<IDialogService>().ImplementedBy<WindowsFormDialogService>().LifestyleTransient(),
-                Component.For<IUnitTabPageFactory>().ImplementedBy<UnitTabPageFactory>().LifestyleTransient());
+                Component.For<IUnitTabPageFactory>().ImplementedBy<UnitTabPageFactory>().LifestyleTransient(),
+                Component.For<IPromptDialog>().ImplementedBy<WinFormPromptDialog>());
         }
     }
 }

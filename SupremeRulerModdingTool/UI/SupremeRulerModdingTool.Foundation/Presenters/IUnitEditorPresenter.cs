@@ -11,8 +11,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters
         bool IsDirty { get; }
         string Name { get; set; }
 
-        void InitializeView(string path);
+        void PrepForUpdate(string path);
 
         void Save();
+        void InitializeNewView(string name);
+        void DeleteRows();
+        void CopyRows();
+        void PasteRows();
     }
 }

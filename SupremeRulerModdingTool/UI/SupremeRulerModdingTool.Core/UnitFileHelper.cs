@@ -42,16 +42,105 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
             new ItemClass { Category = "Upgrades", Class = "Facilities", SubClass = "Facility", UnitClass = 21 },
         };
 
-        private readonly List<string> _unitColumns;
-        private readonly List<string> _missileColumns;
-        private readonly List<string> _upgradeColumns;
-
         private readonly Dictionary<string, IList<ItemModel>> _container;
 
-        public UnitFileHelper(string path)
+        private List<string> _unitColumns;
+        private List<string> _missileColumns;
+        private List<string> _upgradeColumns;
+
+        public UnitFileHelper(string defaultUnitFilePath)
         {
             _container = new Dictionary<string, IList<ItemModel>>();
+            InitColumns(defaultUnitFilePath);
+        }
 
+        public UnitFileHelper(string defaultUnitFilePath, string path)
+            : this(defaultUnitFilePath)
+        {
+            Init(path);
+        }
+
+        public static IEnumerable<string> Categories
+        {
+            get
+            {
+                return CategoryList;
+            }
+        }
+
+        public Dictionary<string, IList<ItemModel>> Container
+        {
+            get
+            {
+                return _container;
+            }
+        }
+
+        public static IEnumerable<string> GetClasses(string category)
+        {
+            return ItemClasses.Where(@class => @class.Category == category)
+                    .Select(@class => @class.Class)
+                    .Distinct()
+                    .ToList();
+        }
+
+        public static IEnumerable<string> GetSubClasses(string className)
+        {
+            return ItemClasses.Where(@class => @class.Class == className)
+                    .Select(@class => @class.SubClass)
+                    .Distinct()
+                    .ToList();
+        }
+
+        public void InitColumns(string defaultUnitFilePath)
+        {
+            string readFile = ReadFile(defaultUnitFilePath);
+
+            using (var stringReader = new StringReader(readFile))
+            {
+                int count = 0;
+                string line;
+                while ((line = stringReader.ReadLine()) != null)
+                {
+                    if (count > 4)
+                    {
+                        break;
+                    }
+
+                    if (count == 0 || count == 4)
+                    {
+                        count++;
+                        continue;
+                    }
+
+                    // Units
+                    if (count == 1)
+                    {
+                        _unitColumns = GetHeaderLine(line);
+                        count++;
+                        continue;
+                    }
+
+                    // Missiles
+                    if (count == 2)
+                    {
+                        _missileColumns = GetHeaderLine(line);
+                        count++;
+                        continue;
+                    }
+
+                    // Upgrades
+                    if (count == 3)
+                    {
+                        _upgradeColumns = GetHeaderLine(line);
+                        count++;
+                    }
+                }
+            }
+        }
+
+        public void Init(string path)
+        {
             string readFile = ReadFile(path);
 
             using (var stringReader = new StringReader(readFile))
@@ -60,32 +149,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                 string line;
                 while ((line = stringReader.ReadLine()) != null)
                 {
-                    if (count == 0 || count == 4)
+                    if (count <= 4)
                     {
-                        count++;
-                        continue;
-                    }
-
-                    // Units
-                    if (count == 1) 
-                    {
-                        _unitColumns = GetHeaderLine(line);
-                        count++;
-                        continue;
-                    }
-
-                    // Missiles
-                    if (count == 2) 
-                    {
-                        _missileColumns = GetHeaderLine(line);
-                        count++;
-                        continue;
-                    }
-
-                    // Upgrades
-                    if (count == 3) 
-                    {
-                        _upgradeColumns = GetHeaderLine(line);
                         count++;
                         continue;
                     }
@@ -109,31 +174,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
             }
         }
 
-        public static IEnumerable<string> Categories
-        {
-            get
-            {
-                return CategoryList;
-            }
-        }
-
-        public static IEnumerable<string> GetClasses(string category)
-        {
-            return ItemClasses.Where(@class => @class.Category == category)
-                    .Select(@class => @class.Class)
-                    .Distinct()
-                    .ToList();
-        }
-
-        public static IEnumerable<string> GetSubClasses(string className)
-        {
-            return ItemClasses.Where(@class => @class.Class == className)
-                    .Select(@class => @class.SubClass)
-                    .Distinct()
-                    .ToList();
-        }
-
-        public IList<ItemModel> GetItemModels(string category, string className, string subClassName, string searchText)
+        public IEnumerable<ItemModel> GetItemModels(string category, string className, string subClassName, string searchText)
         {
             IList<ItemModel> itemModels;
                
@@ -186,13 +227,39 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                 .ToList();
         }
 
+        private static string ReadFile(string filePath)
+        {
+            // TODO : add to core library
+            using (var streamReader = new StreamReader(filePath, Encoding.GetEncoding("iso-8859-1")))
+            {
+                return streamReader.ReadToEnd();
+            }
+        }
+
         private List<string> GetHeaderLine(string headerLine)
         {
+            var columns = new List<string>();
+
             string header = headerLine.Substring(3);
+            List<string> tempColumns = header.Split(',').ToList();
+            tempColumns[1] = tempColumns[1].IsNullOrEmpty() ? "Name" : tempColumns[1];
 
-            List<string> columns = header.Split(',').ToList();
+            for (int i = 0; i < tempColumns.Count; i++)
+            {
+                string columnName = tempColumns[i];
 
-            columns[1] = columns[1].IsNullOrEmpty() ? "Name" : columns[1];
+                if (columnName.IsNullOrEmpty() || header == "-")
+                {
+                    columnName = string.Format("Column{0}", i);
+                }
+
+                if (columns.Contains(columnName))
+                {
+                    columnName = string.Format("{0}{1}", columnName, i);
+                }
+
+                columns.Add(columnName);
+            }
 
             return columns;
         }
@@ -224,41 +291,19 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                 _container.Add(category, new List<ItemModel>());
             }
 
-            List<string> headerByCategory = GetColumnsByCategory(category);
+            List<string> columns = GetColumnsByCategory(category);
 
             var model = new ItemModel();
 
-            for (int i = 0; i < headerByCategory.Count; i++)
+            for (int i = 0; i < columns.Count; i++)
             {
-                string header = headerByCategory[i];
+                string header = columns[i];
                 string value = values[i];
-
-                if (header.IsNullOrEmpty() || header == "-")
-                {
-                    header = string.Format("Column{0}", i);
-                }
-
-                object objValue;
-                bool dublicateHeader = model.TryGetValue(header, out objValue);
-
-                if (dublicateHeader)
-                {
-                    header = string.Format("{0}{1}", header, i);
-                }
 
                 model[header] = value;
             }
 
-
             _container[category].Add(model);
-        }
-
-        public static string ReadFile(string filePath)
-        {
-            using (StreamReader streamReader = new StreamReader(filePath, Encoding.GetEncoding("iso-8859-1")))
-            {
-               return streamReader.ReadToEnd();   
-            }
         }
     }
 }

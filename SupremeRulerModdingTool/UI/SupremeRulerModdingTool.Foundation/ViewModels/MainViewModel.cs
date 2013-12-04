@@ -1,117 +1,138 @@
-﻿using System.Windows.Input;
+﻿using System.Windows.Forms;
+using System.Windows.Input;
 using MvpVmFramework.Core.Foundation;
 
 namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private ICommand _selectGamePath;
-        private ICommand _createNewUnitFile;
-        private ICommand _openExistingUnitFile;
-        private ICommand _saveFiles;
-        private ICommand _closeTab;
-        private ICommand _selectedTabChanged;
+        private ICommand _selectGamePathCommand;
+        private ICommand _createNewUnitFileCommand;
+        private ICommand _openExistingUnitFileCommand;
+        private ICommand _saveSelectedTabCommand;
+        private ICommand _closeTabCommand;
+        private ICommand _selectedTabChangedCommand;
+        private ICommand _keyPressCommand;
 
         private int _closeIndex;
         private int _selectedTabIndex;
 
-        public ICommand SelectGamePath
+        private KeyEventArgs _keyEventArgs;
+
+        public ICommand SelectGamePathCommand
         {
             get
             {
-                return _selectGamePath;
+                return _selectGamePathCommand;
             }
 
             set
             {
-                if (_selectGamePath != value)
+                if (_selectGamePathCommand != value)
                 {
-                    _selectGamePath = value;
+                    _selectGamePathCommand = value;
                     RaisePropertyChanged();
                 }
             }
         }
 
-        public ICommand CreateNewUnitFile
+        public ICommand CreateNewUnitFileCommand
         {
             get
             {
-                return _createNewUnitFile;
+                return _createNewUnitFileCommand;
             }
 
             set
             {
-                if (_createNewUnitFile != value)
+                if (_createNewUnitFileCommand != value)
                 {
-                    _createNewUnitFile = value;
+                    _createNewUnitFileCommand = value;
                     RaisePropertyChanged();
                 }
             }
         }
 
-        public ICommand OpenExistingUnitFile
+        public ICommand OpenExistingUnitFileCommand
         {
             get
             {
-                return _openExistingUnitFile;
+                return _openExistingUnitFileCommand;
             }
 
             set
             {
-                if (_openExistingUnitFile != value)
+                if (_openExistingUnitFileCommand != value)
                 {
-                    _openExistingUnitFile = value;
+                    _openExistingUnitFileCommand = value;
                     RaisePropertyChanged();
                 }
             }
         }
 
-        public ICommand SaveFiles
+        public ICommand SaveSelectedTabCommand
         {
             get
             {
-                return _saveFiles;
+                return _saveSelectedTabCommand;
             }
 
             set
             {
-                if (_saveFiles != value)
+                if (_saveSelectedTabCommand != value)
                 {
-                    _saveFiles = value;
+                    _saveSelectedTabCommand = value;
                     RaisePropertyChanged();
                 }
             }
         }
 
-        public ICommand CloseTab
+        public ICommand CloseTabCommand
         {
             get
             {
-                return _closeTab;
+                return _closeTabCommand;
             }
 
             set
             {
-                if (_closeTab != value)
+                if (_closeTabCommand != value)
                 {
-                    _closeTab = value;
+                    _closeTabCommand = value;
                     RaisePropertyChanged();
                 }
             }
         }
 
-        public ICommand SelectedTabChanged
+        public ICommand SelectedTabChangedCommand
         {
             get
             {
-                return _selectedTabChanged;
+                return _selectedTabChangedCommand;
             }
 
             set
             {
-                if (_selectedTabChanged != value)
+                if (_selectedTabChangedCommand != value)
                 {
-                    _selectedTabChanged = value;
+                    _selectedTabChangedCommand = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public ICommand KeyPressCommand
+        {
+            get
+            {
+                return _keyPressCommand;
+            }
+
+            set
+            {
+                if (_keyPressCommand != value)
+                {
+                    _keyPressCommand = value;
                     RaisePropertyChanged();
                 }
             }
@@ -141,6 +162,21 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels
             set
             {
                 _selectedTabIndex = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        // TODO : Abstract
+        public KeyEventArgs KeyEventArgs
+        {
+            get
+            {
+                return _keyEventArgs;
+            }
+
+            set
+            {
+                _keyEventArgs = value;
                 RaisePropertyChanged();
             }
         }
