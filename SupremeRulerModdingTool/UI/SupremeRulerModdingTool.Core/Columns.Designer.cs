@@ -70,7 +70,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to // UNITS,Name,Unit Class,Pic Number,Tech Level,Year considered obsolete,Market avail.,Targettype,Move type,initiative,stealth,carrier capacity,region code,Battalion size,crew per squad,upgrade to,replaced by,refit to,-,move speed,missile capacity,spot type 1,spot type 2,tech prereq1,tech prereq2,days to build,cost to build,-,Ur Cost,Weight,-,cargo capacity,movement range,usused,fuel cap,combat time,ammo capacity,att0,att1,att2,att3,att4,att5,att6,att7,att8,def0,def1,def2,def3,attrange0,attrange1,attrange2,a [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to // UNITS,Name,Unit Class,Pic Number,Tech Level,Year considered obsolete,Market avail.,Targettype,Move type,initiative,stealth,carrier capacity,region code,Battalion size,crew per squad,upgrade to,replaced by,refit to,-,move speed,missile capacity,spot type 1,spot type 2,tech prereq1,tech prereq2,days to build,cost to build,-,Ur Cost,Weight,-,cargo capacity,movement range,usused,fuel cap,combat time,ammo capacity,Soft,Hard,Fort,Close Air,Mid Air,High Air,Surface,Submerged,Close Combat,Ground Def,Air Def,Indi [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string UNITS {
             get {
