@@ -150,10 +150,16 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 
             using (var stringReader = new StringReader(readFile))
             {
-                int count = 0;
+                //int count = 0;
                 string line;
                 while ((line = stringReader.ReadLine()) != null)
                 {
+                    if (line.IsNullOrEmpty())
+                    {
+                        //count++;
+                        break;                        
+                    }
+
                     int integer;
                     bool isInteger = int.TryParse(line[0].ToString(CultureInfo.InvariantCulture), out integer);
 
@@ -165,7 +171,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 
                     if (!isInteger)
                     {
-                        count++;
+                        // count++;
                         continue;
                     }
 
