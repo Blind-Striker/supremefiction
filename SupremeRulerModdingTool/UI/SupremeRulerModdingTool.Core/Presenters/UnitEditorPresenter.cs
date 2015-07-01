@@ -33,7 +33,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
         private bool _preventEventFire;
         private bool _isDirty;
-        
+        private bool _isSr5;
+
         public UnitEditorPresenter(IUnitEditorView view, IMessageService messageService, IRowContainer rowContainer, IAppSettings appSettings) 
             : base(view)
         {
@@ -50,9 +51,10 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             View.DataContext = _unitEditorViewModel;
 
             string gamePath = appSettings["GamePath"].ToString();
+            _isSr5 = IsSr5(gamePath);
             _dataFolder = Path.Combine(gamePath, "Maps", "Data");
             _defaultUnitFilePath = Path.Combine(_dataFolder, "DEFAULT.UNIT");
-            _fileHelper = new UnitFileHelper(_defaultUnitFilePath);
+            _fileHelper = new UnitFileHelper(_isSr5);
             _categories = UnitFileHelper.Categories.ToList();
 
             _unitEditorViewModel.PropertyChanged += UnitEditorViewModelPropertyChanged;
@@ -238,7 +240,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
 
                 foreach (var column in columnsByCategory)
                 {
-                    dataTable.Columns.Add(new DataColumn(column));
+                    dataTable.Columns.Add(new DataColumn(column.Trim()));
                 }
 
                 dataTable.RowChanged += SetDirty;
@@ -400,6 +402,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
         {
             List<int> unitClasses = _fileHelper.GetUnitClasses(category, className, subClassName);
 
+            const string SrUnitClassColumnName = "Unit Class";
+            const string SrNameColumnName = "Name";
+
+            const string Sr5UnitClassColumnName = "ClassNum";
+            const string Sr5NameColumnName = "ModelCode+EquipName";
+
             string unitClassQuery = null;
             string searchQuery = null;
             string query;
@@ -407,12 +415,12 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             if (!unitClasses.IsNullOrEmpty())
             {
                 string unitClassesString = unitClasses.JoinToString(",");
-                unitClassQuery = string.Format("[Unit Class] IN ({0})", unitClassesString);
+                unitClassQuery = string.Format("[{1}] IN ({0})", unitClassesString, _isSr5 ? Sr5UnitClassColumnName : SrUnitClassColumnName);
             }
 
             if (!searchText.IsNullOrEmpty())
             {
-                searchQuery = string.Format("[Name] LIKE '%{0}%'", searchText.ToLower());
+                searchQuery = string.Format("[{1}] LIKE '%{0}%'", searchText.ToLower(), _isSr5 ? Sr5NameColumnName : SrNameColumnName);
             }
 
             if (!unitClassQuery.IsNullOrEmpty() && !searchQuery.IsNullOrEmpty())
@@ -454,6 +462,11 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core.Presenters
             {
                 delegateCommand.RaiseCanExecuteChanged();
             }
+        }
+
+        private bool IsSr5(string gamePath)
+        {
+            return gamePath.Contains("Supreme Ruler 1936") || gamePath.Contains("Supreme Ruler Ultimate");
         }
     }
 }

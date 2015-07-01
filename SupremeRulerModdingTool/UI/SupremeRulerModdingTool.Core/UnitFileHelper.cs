@@ -11,6 +11,7 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 {
     public class UnitFileHelper
     {
+        private readonly bool _sr5;
         private static readonly List<string> CategoryList = new List<string> { "Units", "Missiles", "Upgrades" };
 
         private static readonly List<ItemClass> ItemClasses = new List<ItemClass>
@@ -49,14 +50,15 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
         private List<string> _missileColumns;
         private List<string> _upgradeColumns;
 
-        public UnitFileHelper(string defaultUnitFilePath)
+        public UnitFileHelper(bool sr5)
         {
+            _sr5 = sr5;
             _container = new Dictionary<string, IList<ItemModel>>();
-            InitColumns(defaultUnitFilePath);
+            InitColumns(sr5);
         }
 
-        public UnitFileHelper(string defaultUnitFilePath, string path)
-            : this(defaultUnitFilePath)
+        public UnitFileHelper(bool sr5, string path)
+            : this(sr5)
         {
             Init(path);
         }
@@ -93,11 +95,20 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                     .ToList();
         }
 
-        public void InitColumns(string defaultUnitFilePath)
+        public void InitColumns(bool sr5)
         {
-            _unitColumns = GetHeaderLine(Columns.UNITS);
-            _missileColumns = GetHeaderLine(Columns.Missiles);
-            _upgradeColumns = GetHeaderLine(Columns.upgrades);
+            if (!sr5)
+            {
+                _unitColumns = GetHeaderLine(Columns.UNITS);
+                _missileColumns = GetHeaderLine(Columns.Missiles);
+                _upgradeColumns = GetHeaderLine(Columns.upgrades);
+            }
+            else
+            {
+                _unitColumns = GetHeaderLine(Columns.SR5ID);
+                _missileColumns = GetHeaderLine(Columns.SR5ID);
+                _upgradeColumns = GetHeaderLine(Columns.SR5ID);
+            }
 
             //string readFile = ReadFile(defaultUnitFilePath);
 
@@ -157,7 +168,13 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
                     if (line.IsNullOrEmpty())
                     {
                         //count++;
-                        break;                        
+                        continue;                        
+                    }
+
+                    if (line.Contains("RAWPROD"))
+                    {
+                        //count++;
+                        break;
                     }
 
                     int integer;
@@ -197,7 +214,13 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
         public IEnumerable<ItemModel> GetItemModels(string category, string className, string subClassName, string searchText)
         {
             IList<ItemModel> itemModels;
-               
+
+            const string SrUnitClassColumnName = "Unit Class";
+            const string SrNameColumnName = "Name";
+
+            const string Sr5UnitClassColumnName = "ClassNum";
+            const string Sr5NameColumnName = "ModelCode+EquipName";
+
             bool founded = _container.TryGetValue(category, out itemModels);
 
             if (!founded)
@@ -209,8 +232,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 
             itemModels = itemModels.Where(
                     model =>
-                    (unitClasses.IsNullOrEmpty() || unitClasses.Contains(int.Parse(model["Unit Class"].ToString()))) &&
-                    (searchText.IsNullOrEmpty() || model["Name"].ToString().ToLowerInvariant().Contains(searchText.ToLowerInvariant()))).ToList();
+                    (unitClasses.IsNullOrEmpty() || unitClasses.Contains(int.Parse(model[_sr5 ? Sr5UnitClassColumnName : SrUnitClassColumnName].ToString()))) &&
+                    (searchText.IsNullOrEmpty() || model[_sr5 ? Sr5NameColumnName : SrNameColumnName].ToString().ToLowerInvariant().Contains(searchText.ToLowerInvariant()))).ToList();
 
             return itemModels;
         }
@@ -323,8 +346,8 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.Core
 
             for (int i = 0; i < columns.Count; i++)
             {
-                string header = columns[i];
-                string value = values[i];
+                string header = columns[i].Trim();
+                string value = values[i].Trim();
 
                 model[header] = value;
             }

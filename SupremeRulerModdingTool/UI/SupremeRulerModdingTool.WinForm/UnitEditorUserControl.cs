@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Waf.Presentation.WinForms;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Presenters;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.ViewModels;
 using SupremeFiction.UI.SupremeRulerModdingTool.Foundation.Views;
@@ -17,7 +18,13 @@ namespace SupremeFiction.UI.SupremeRulerModdingTool.WinForm
         public UnitEditorUserControl()
         {
             InitializeComponent();
+            Dispatcher.CurrentDispatcher.ShutdownStarted += CurrentDispatcher_ShutdownStarted;
             _commandAdapter = new CommandAdapter();
+        }
+
+        private void CurrentDispatcher_ShutdownStarted(object sender, EventArgs e)
+        {
+            DataContext = null;
         }
 
         public IUnitEditorPresenter Presenter { get; set; }
